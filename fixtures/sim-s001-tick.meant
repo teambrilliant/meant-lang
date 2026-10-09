@@ -1,0 +1,49 @@
+domain sim-s001-tick
+  "A planted tick claim. The mid-pack branch asserts that one session tick lands the membership
+   in the last-of-pack region. It does not — and the bug survives human review because the first
+   witness anyone reaches by hand (count = 3, n = 2) makes the claim come out TRUE. The
+   falsifying world is one step further out."
+  mode model-first
+
+concept Membership
+  "The membership the tick moves."
+  dimension status = active | paused | cancelled
+  dimension pack = single | multi
+  field current_session_number: int
+  field session_count: int
+  field next_visit_date: date
+
+concept HeldFreeze
+  "A held freeze request; its presence closes the mid-pack region."
+  dimension status = pending | applied
+  field membership: Membership
+
+concept Visit
+  "One attended session in a pack."
+  dimension reward = voucher | none
+  field membership: Membership
+
+shape S001 MidPack of Membership
+  where status = active
+    and pack = multi
+    and 1 < current_session_number
+    and current_session_number < session_count
+    and no HeldFreeze where status = pending
+
+shape S002 LastOfPack of Membership
+  where status = active and pack = multi
+    and current_session_number = session_count
+
+action SessionTick
+  "The pack's clock: one attended session fires."
+  in LastOfPack :
+    effect
+      current_session_number = 1
+      new Visit with reward = voucher
+  in MidPack :
+    effect
+      current_session_number = current_session_number + 1
+      new Visit with reward = none
+      -> S002  # SIM-EXPECT: falsified SessionTick:S002
+  effect
+    next_visit_date += 1 month

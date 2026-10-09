@@ -1,0 +1,46 @@
+domain invoicing
+  "The business rules for sending an invoice."
+  mode model-first
+
+dimension actor = owner | client
+
+concept DenyCode
+  field copy: string
+  values
+    NOT_DRAFT "Only a draft invoice can be sent."
+    EMPTY_INVOICE "An invoice needs at least one line item."
+
+concept Invoice
+  dimension status = draft | sent
+
+concept LineItem
+  field invoice: Invoice
+
+shape Draft of Invoice
+  where status = draft
+
+shape Sent of Invoice
+  where status = sent
+
+shape Empty of Invoice
+  where no LineItem
+
+action SendInvoice of Invoice
+  "The owner sends an invoice."
+  by owner
+  requires Draft else NOT_DRAFT
+  requires not Empty else EMPTY_INVOICE
+  effect
+    status = sent
+
+scenario SendingADraft
+  with Draft, LineItem
+  the owner sends it via SendInvoice -> Sent
+
+scenario SendingAnEmptyDraft
+  with Draft, Empty
+  the owner sends it via SendInvoice -> denied EMPTY_INVOICE
+
+scenario SendingTwice
+  with Sent, LineItem
+  the owner sends it again via SendInvoice -> denied NOT_DRAFT

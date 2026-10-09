@@ -1,0 +1,26 @@
+domain e36
+  "An action's subject must be determinable; mixed shape subjects are an error (E36/V9)."
+  mode model-first
+
+concept Subscription
+  dimension status = active | cancelled
+
+concept Addon
+  dimension state = live | dropped
+  field subscription: Subscription
+
+shape ActiveSubscription of Subscription
+  where status = active
+
+shape LiveAddon of Addon
+  where state = live
+
+action CancelSomething
+  requires ActiveSubscription  # EXPECT: V9
+  requires LiveAddon  # EXPECT: V9
+  effect
+    the thing is cancelled
+
+action Orphan  # EXPECT: V9
+  effect
+    something happens

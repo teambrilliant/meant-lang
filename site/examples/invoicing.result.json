@@ -1,0 +1,241 @@
+{
+  "version": 1,
+  "files": [
+    "site/examples/invoicing.meant"
+  ],
+  "diagnostics": [
+    {
+      "law": "L-dim-single-consumer",
+      "code": "L-dim-single-consumer",
+      "severity": "info",
+      "message": "`dimension actor` has 1 consumer — dead-or-nestable vocabulary (§4.2).",
+      "file": "site/examples/invoicing.meant",
+      "range": {
+        "start": {
+          "line": 5,
+          "col": 11
+        },
+        "end": {
+          "line": 5,
+          "col": 16
+        }
+      },
+      "fix": "consume it, or delete it"
+    },
+    {
+      "law": "L-no-writer",
+      "code": "L-no-writer",
+      "severity": "info",
+      "message": "No action writes `LineItem.invoice`.",
+      "file": "site/examples/invoicing.meant",
+      "range": {
+        "start": {
+          "line": 17,
+          "col": 9
+        },
+        "end": {
+          "line": 17,
+          "col": 16
+        }
+      },
+      "fix": "declare the action that moves it, or drop the field"
+    },
+    {
+      "law": "V12",
+      "code": "unreachable-shape",
+      "severity": "warning",
+      "message": "no computed edge lands in `Draft`: no action's effects move a subject into the region, within scope (V12).",
+      "file": "site/examples/invoicing.meant",
+      "range": {
+        "start": {
+          "line": 19,
+          "col": 1
+        },
+        "end": {
+          "line": 19,
+          "col": 23
+        }
+      },
+      "fix": "declare the effect that moves a subject into it, or delete the shape"
+    },
+    {
+      "law": "V12",
+      "code": "unreachable-shape",
+      "severity": "warning",
+      "message": "no computed edge lands in `Empty`: no action's effects move a subject into the region, within scope (V12).",
+      "file": "site/examples/invoicing.meant",
+      "range": {
+        "start": {
+          "line": 25,
+          "col": 1
+        },
+        "end": {
+          "line": 25,
+          "col": 23
+        }
+      },
+      "fix": "declare the effect that moves a subject into it, or delete the shape"
+    }
+  ],
+  "summary": {
+    "errors": 0,
+    "warnings": 2,
+    "infos": 2
+  },
+  "verdicts": [
+    {
+      "kind": "witness",
+      "subject": "Draft",
+      "status": "verified",
+      "message": "satisfiable — one concrete world lights this region up.",
+      "file": "site/examples/invoicing.meant",
+      "range": {
+        "start": {
+          "line": 19,
+          "col": 1
+        },
+        "end": {
+          "line": 19,
+          "col": 23
+        }
+      },
+      "counterexample": [
+        "Invoice#1 (subject): status = draft",
+        "today = 2026-03-15"
+      ]
+    },
+    {
+      "kind": "machine",
+      "subject": "Sent",
+      "status": "unprobeable",
+      "message": "edges land in `Sent` but none computably leaves it: the region is terminal, or its exit lives in an effect the kernel cannot execute.",
+      "file": "site/examples/invoicing.meant",
+      "range": {
+        "start": {
+          "line": 22,
+          "col": 1
+        },
+        "end": {
+          "line": 22,
+          "col": 22
+        }
+      }
+    },
+    {
+      "kind": "witness",
+      "subject": "Sent",
+      "status": "verified",
+      "message": "satisfiable — one concrete world lights this region up.",
+      "file": "site/examples/invoicing.meant",
+      "range": {
+        "start": {
+          "line": 22,
+          "col": 1
+        },
+        "end": {
+          "line": 22,
+          "col": 22
+        }
+      },
+      "counterexample": [
+        "Invoice#1 (subject): status = sent",
+        "today = 2026-03-15"
+      ]
+    },
+    {
+      "kind": "witness",
+      "subject": "Empty",
+      "status": "verified",
+      "message": "satisfiable — one concrete world lights this region up.",
+      "file": "site/examples/invoicing.meant",
+      "range": {
+        "start": {
+          "line": 25,
+          "col": 1
+        },
+        "end": {
+          "line": 25,
+          "col": 23
+        }
+      },
+      "counterexample": [
+        "Invoice#1 (subject)",
+        "today = 2026-03-15"
+      ]
+    },
+    {
+      "kind": "probe",
+      "subject": "SendInvoice@effect -> Sent",
+      "status": "derived",
+      "message": "the deltas land in `Sent` — authored nowhere, and correctly so (§4.6).",
+      "file": "site/examples/invoicing.meant",
+      "range": {
+        "start": {
+          "line": 28,
+          "col": 1
+        },
+        "end": {
+          "line": 28,
+          "col": 30
+        }
+      }
+    },
+    {
+      "kind": "replay",
+      "subject": "SendingADraft#1",
+      "status": "verified",
+      "message": "lands in `Sent`.",
+      "file": "site/examples/invoicing.meant",
+      "range": {
+        "start": {
+          "line": 38,
+          "col": 41
+        },
+        "end": {
+          "line": 38,
+          "col": 45
+        }
+      }
+    },
+    {
+      "kind": "replay",
+      "subject": "SendingAnEmptyDraft#1",
+      "status": "verified",
+      "message": "denied `EMPTY_INVOICE` (`not Empty` does not hold).",
+      "file": "site/examples/invoicing.meant",
+      "range": {
+        "start": {
+          "line": 42,
+          "col": 41
+        },
+        "end": {
+          "line": 42,
+          "col": 61
+        }
+      },
+      "evidence": [
+        "denied EMPTY_INVOICE"
+      ]
+    },
+    {
+      "kind": "replay",
+      "subject": "SendingTwice#1",
+      "status": "verified",
+      "message": "denied `NOT_DRAFT` (`Draft` does not hold).",
+      "file": "site/examples/invoicing.meant",
+      "range": {
+        "start": {
+          "line": 46,
+          "col": 47
+        },
+        "end": {
+          "line": 46,
+          "col": 63
+        }
+      },
+      "evidence": [
+        "denied NOT_DRAFT"
+      ]
+    }
+  ]
+}

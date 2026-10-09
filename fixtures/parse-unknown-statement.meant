@@ -1,0 +1,17 @@
+domain parse-unknown
+  "A deleted kind is not a statement; recovery keeps the statements after it."
+  mode model-first
+
+concept Subscription
+  dimension status = active | cancelled
+
+policy CancelPolicy                                      # EXPECT: P
+  only when status = active
+
+shape Active of Subscription
+  where status = active
+
+action Cancel of Subscription
+  requires Active
+  effect
+    status = cancelled

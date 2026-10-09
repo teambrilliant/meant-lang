@@ -1,0 +1,458 @@
+domain invoicing
+  "Monthly PDF invoicing for a small consultancy with several clients. Replaces a hosted invoicing service:
+   an invoice is drafted from the client's previous one, adjusted, sent as a PDF, marked paid,
+   and archived — every transition stamps its date. Git is the store; the PDF is a projection."
+  mode model-first
+  state-of-record "git: one file per invoice at clients/<client>/<year>/<number>.yaml"
+
+dimension actor = owner | client
+dimension terms = upon_receipt | net_15 | net_30 | net_60
+
+concept DenyCode
+  "Refusal vocabulary; one code, one message."
+  field copy: string
+  values
+    NOT_DRAFT "Only a draft invoice can be changed or sent."
+    NOT_SENT "Only a sent invoice can be marked paid or reopened."
+    NOT_PAID "Only a paid invoice can be archived."
+    EMPTY_INVOICE "An invoice needs at least one line before it can be sent."
+    NOTHING_TO_DUPLICATE "This client has no invoice to duplicate yet — start one from scratch."
+    IMPORTED_FROZEN "An imported invoice cannot be reopened — its PDF was produced by the previous service, not by this app."
+    CLIENT_ARCHIVED "This client is archived — reactivate it before invoicing."
+    CLIENT_ACTIVE "This client is already active."
+    OPEN_INVOICES "Settle or archive this client's draft and sent invoices before archiving the client."
+
+concept Issuer
+  "The billing entity on the 'From' block: legal name, tax number, postal address."
+  field name: string
+  field tax_number: string
+  field address: string
+  field tax_note: string
+
+concept Client
+  "A billed party. `code` is the short letter that sits inside every invoice number (A = ACME).
+   email_subject and email_body are the per-client send template; %number%, %month%, %amount_due%
+   and %due_date% are filled from the Invoice at send time (July 2026 -> 'July 2026')."
+  dimension status = active | archived
+  field name: string
+  field code: string
+  field address: string
+  field email: string
+  field email_subject: string
+  field email_body: string
+  field notes: string
+  field terms: terms
+  field archived_on: date?
+  dimension currency = usd
+  dimension numbering = period_month | counter
+
+concept Contributor
+  "A person whose hours are billed to one client at one hourly rate — the roster a draft is built from."
+  field client: Client
+  field name: string
+  field rate: decimal
+
+concept Invoice
+  "One billing period for one client. Number = year-code-sequence (2026-A-07); the PDF file is
+   INVOICE_<number>_<issuer name with underscores>.pdf."
+  dimension status = draft | sent | paid | archived
+  dimension origin = native | imported
+  field client: Client
+  field issuer: Issuer
+  field terms: terms
+  field year: int
+  field sequence: int
+  field period_start: date
+  field period_end: date
+  field issue_date: date?
+  field due_date: date?
+  field amount_due: decimal
+  field notes: string
+  field drafted_on: date
+  field sent_on: date?
+  field paid_on: date?
+  field archived_on: date?
+
+concept LineItem
+  "One billed row. A service row is a contributor's hours at the rate frozen when the draft was made,
+   its description rendered as 'Avery Example (07/01 - 07/31)'; an expense row has no contributor and
+   a free description."
+  dimension kind = service | expense
+  field invoice: Invoice
+  field contributor: Contributor?
+  field description: string
+  field quantity: decimal
+  field unit_price: decimal
+  field amount: decimal
+
+touchpoints
+  "Files"
+  "Web"
+  "CLI"
+  "PDF"
+  "Email"
+  # Files: the YAML in git, edited by hand — the only interface for issuer and client setup.
+  # Web: the owner's working surface (draft, edit, send, tables). CLI: the audit — executes every
+  # `check by execution` invariant over the files and re-renders each sent PDF to compare (I003).
+
+shape Draft of Invoice
+  where status = draft
+
+shape Sent of Invoice
+  where status = sent
+
+shape Paid of Invoice
+  where status = paid
+
+shape Archived of Invoice
+  where status = archived
+
+shape Overdue of Invoice
+  where status = sent and due_date < today
+
+shape Empty of Invoice
+  where no LineItem
+
+shape Native of Invoice
+  where origin = native
+
+shape HasInvoices of Client
+  where some Invoice
+
+shape ActiveClient of Client
+  where status = active
+
+shape FreshClient of Client
+  where status = active and no Invoice
+
+shape ArchivedClient of Client
+  where status = archived
+
+shape HasOpenInvoices of Client
+  where some Invoice where status = draft or status = sent
+
+action A008 SetupIssuer of Issuer
+  "Outside any app surface: the owner writes issuer.yaml by hand. No form, no validation beyond
+   the audit; the file is the interface."
+  by owner
+  effect
+    name, tax_number, address and tax_note are as written in issuer.yaml
+
+action A009 SetupClient of Client
+  "Outside any app surface: the owner writes clients/<slug>/client.yaml by hand — identity, terms,
+   numbering, and the roster of Contributor rows with their rates."
+  by owner
+  effect
+    name, code, address, email, email_subject, email_body, notes, terms, currency and numbering are as written in client.yaml
+    Contributor rows are created, changed or removed as written in client.yaml
+
+action A001 DuplicateInvoice of Client
+  "The monthly move: start next month's invoice from the client's latest one — same roster, period
+   advanced one month, numbering advanced, rates re-read from the roster."
+  by owner
+  requires ActiveClient else CLIENT_ARCHIVED
+  requires HasInvoices else NOTHING_TO_DUPLICATE
+  effect
+    new Invoice with status = draft, origin = native, notes = notes, terms = terms
+    drafted_on is recorded as entered, defaulting to today
+    the Invoice takes the client's latest Invoice period advanced by one month
+    year and sequence follow the Client's numbering scheme, inferred from its existing Invoice numbers
+    one LineItem is created per Contributor of the Client with unit_price = Contributor.rate and quantity carried over from the previous LineItem
+
+action A007 NewInvoice of Client
+  "Start an invoice from scratch: an empty draft for a period the owner enters, client defaults
+   applied, no lines. The first invoice of a new client, or a one-off outside the monthly rhythm."
+  by owner
+  requires ActiveClient else CLIENT_ARCHIVED
+  effect
+    new Invoice with status = draft, origin = native, notes = notes, terms = terms
+    drafted_on and the period are recorded as entered, the period defaulting to the current month
+    year and sequence follow the Client's numbering scheme, inferred from its existing Invoice numbers, starting the scheme when there are none
+
+action A011 ArchiveClient of Client
+  "Someone the owner no longer works with: hidden from the working views, history kept, no new invoices."
+  by owner
+  requires ActiveClient else CLIENT_ARCHIVED
+  requires not HasOpenInvoices else OPEN_INVOICES
+  effect
+    status = archived
+    archived_on is recorded as entered, defaulting to today
+
+action A012 ReactivateClient of Client
+  "Work resumes: the client returns to the working views and can be invoiced again."
+  by owner
+  requires ArchivedClient else CLIENT_ACTIVE
+  effect
+    status = active
+    archived_on is cleared
+
+action A010 ImportInvoice of Client
+  "Migration: bring an invoice from the previous service in as history. The pdf is copied beside a new file whose
+   number, period, dates, lines, notes and status are read from the previous service's export; the audit then
+   compares the file to the pdf's text."
+  by owner
+  effect
+    new Invoice with origin = imported
+    status, year, sequence, period, issue_date, due_date, LineItem rows, notes and the event dates are as read from the previous service's csv export
+    the original pdf is stored beside the file and is never parsed for data, only audited against it
+
+action A002 EditDraft of Invoice
+  "Adjust quantities, lines, period, terms, dates or notes before sending."
+  by owner
+  requires Draft else NOT_DRAFT
+  effect
+    LineItem rows, period, terms, issue_date, due_date and notes change as entered
+
+action A003 SendInvoice of Invoice
+  "Freeze the draft, render the PDF, email it to the client."
+  by owner
+  requires Draft else NOT_DRAFT
+  requires not Empty else EMPTY_INVOICE
+  effect
+    status = sent
+    issue_date, due_date and sent_on are recorded as entered, defaulting to today and to the terms
+    the rendered pdf is emailed to Client.email under Client.email_subject and Client.email_body with their placeholders filled
+
+action A006 ReopenInvoice of Invoice
+  "Take a sent invoice back to draft to fix a mistake; the next send re-renders and re-sends under the same number."
+  by owner
+  requires Sent else NOT_SENT
+  requires Native else IMPORTED_FROZEN
+  effect
+    status = draft
+
+action A004 MarkPaid of Invoice
+  "Record the client's payment."
+  by owner
+  requires Sent else NOT_SENT
+  effect
+    status = paid
+    paid_on is recorded as entered, defaulting to today
+
+action A005 ArchiveInvoice of Invoice
+  "Close the books on a paid invoice."
+  by owner
+  requires Paid else NOT_PAID
+  effect
+    status = archived
+    archived_on is recorded as entered, defaulting to today
+
+invariant I001 NumberIsUnique
+  "No two Invoices of one Client share year and sequence — the number is the file name, so a
+   collision cannot be represented."
+  check by schema
+
+invariant I002 NumberFollowsScheme
+  "year is the calendar year of period_start. Under period_month numbering, sequence is the month
+   of period_start (July 2026 for ACME is 2026-A-07); under counter numbering, sequence is the
+   client's previous sequence in that year plus one, starting at 1."
+  check by execution
+
+invariant I003 SentInvoiceIsFrozen
+  "Outside Draft, nothing but status and the event dates ever changes. The stored pdf is the
+   document the client received: the audit compares its text field by field (number, dates, each
+   line, total, notes) to the file — never byte for byte, so the template may change without
+   invalidating history. Changing a native sent invoice means ReopenInvoice first."
+  check by execution
+
+invariant I004 AmountDueIsSumOfLines
+  "amount_due equals the exact integer-cent sum of LineItem amount over the Invoice — never a
+   re-multiplication of the lines."
+  check by execution
+
+invariant I005 LineAmountIsQuantityTimesPrice
+  "LineItem amount equals quantity times unit_price, rounded half-up to the cent once, at the line;
+   money is integer minor units end to end, quantity is fixed to two decimals."
+  check by execution
+
+invariant I006 EventDatesAreOrdered
+  "drafted_on <= sent_on <= paid_on <= archived_on wherever each is set."
+  check by execution
+
+invariant I007 PdfFileNameIsDerived
+  "The pdf file is INVOICE_<year>-<Client.code>-<sequence, two digits>_<Issuer.name with
+   spaces as underscores>.pdf, and a service LineItem.description is <Contributor.name> (<period_start> - <period_end>) in MM/DD."
+  check by execution
+
+invariant I008 DueDateFollowsTerms
+  "due_date is issue_date plus the days the Invoice terms name: upon_receipt 0, net_15 15, net_30 30, net_60 60."
+  check by execution
+
+invariant I010 BalanceIsSumOfSent
+  "Wherever the Web shows a balance over a list of Invoices, it is the exact sum of amount_due
+   over the Sent ones in that list; an invoiced total sums amount_due by sent_on in the period,
+   a received total by paid_on. Reporting year = the number's year."
+  check by execution
+
+invariant I011 PathFollowsNumber
+  "An Invoice lives at clients/<Client slug>/<year>/<number>.yaml with its PDF beside it; a file
+   elsewhere, or a name disagreeing with year and sequence, fails the check."
+  check by schema
+
+invariant I012 EmailTemplateIsFilled
+  "The send email is Client.email_subject and Client.email_body with %number%, %month%,
+   %amount_due% and %due_date% replaced from the Invoice; an unknown placeholder fails the send."
+  check by execution
+
+invariant I009 NumberingIsDetectable
+  "A Client's numbering scheme is inferred per year from its existing Invoice numbers and must
+   agree with the declared one for the current year; a year whose numbers fit no scheme, or more
+   than one, refuses DuplicateInvoice and NewInvoice. Imported history may switch schemes between years."
+  check by execution
+
+exposure Invoice
+  to client at "PDF"
+    must-see year, sequence, issue_date, due_date, terms, amount_due, notes
+    must-see Issuer.name, Issuer.tax_number, Issuer.address, Issuer.tax_note
+    must-see Client.name, Client.address
+    must-see LineItem.kind, LineItem.description, LineItem.quantity, LineItem.unit_price, LineItem.amount
+    must-not-see drafted_on, sent_on, paid_on, archived_on, Client.email, Client.code
+  to client at "Email"
+    must-see year, sequence, amount_due, Client.email_subject, Client.email_body
+  to owner at "Web"
+    must-see status, terms, amount_due, drafted_on, sent_on, paid_on, archived_on, LineItem, Client.email
+  to owner at "CLI"
+    must-see status, amount_due, sent_on, paid_on
+
+scenario SC001 MonthlyLifecycle
+  "The happy path, one invoice from draft to archive."
+  with Draft, LineItem, today "2026-08-11"
+  the owner sends it via SendInvoice -> Sent
+  the owner records the payment via MarkPaid -> Paid
+  the owner archives it via ArchiveInvoice -> Archived
+  expect
+    lane "PDF": year, sequence, LineItem rows and amount_due reach the client
+    lane "Email": the pdf reaches Client.email
+  checks I003, I006
+
+scenario SC008 DraftingNextMonth
+  "August follows July: same roster, next number, rates re-read."
+  with Client "ACME", today "2026-09-01"
+  the owner drafts the next invoice via DuplicateInvoice -> a new Invoice sits in Draft
+  expect
+    lane "Web": the new Invoice is "2026-A-08" for period "2026-08-01" to "2026-08-31" with one LineItem per Contributor
+  checks I002, I009
+
+scenario SC014 FirstInvoiceFromScratch
+  "A new client: nothing to duplicate, so the owner starts empty and adds lines by hand."
+  with FreshClient "Northwind", today "2026-09-01"
+  the owner writes the client file by hand via SetupClient
+  the owner duplicates via DuplicateInvoice -> denied NOTHING_TO_DUPLICATE
+  the owner starts one via NewInvoice -> a new Invoice sits in Draft and Empty
+  the owner adds lines via EditDraft
+  expect
+    lane "Web": the new Invoice is "2026-N-01" with no LineItem until edited
+  checks I002, I009
+
+scenario SC015 FirstRun
+  "A fresh checkout: the issuer block exists only once the owner writes it."
+  with Issuer
+  the owner writes issuer.yaml by hand via SetupIssuer
+  expect
+    lane "Files": issuer.yaml holds name, tax_number, address, tax_note
+    lane "CLI": the audit refuses a repo without issuer.yaml
+
+scenario SC018 ArchivingAClient
+  "Work ends: the client is archived once nothing is open, and cannot be invoiced until reactivated."
+  with ActiveClient, HasInvoices, Invoice.status = paid, today "2026-12-31"
+  the owner archives the client via ArchiveClient -> ArchivedClient
+  the owner duplicates via DuplicateInvoice -> denied CLIENT_ARCHIVED
+  the owner starts one via NewInvoice -> denied CLIENT_ARCHIVED
+  the owner reactivates via ReactivateClient -> ActiveClient
+  expect
+    lane "Web": archived clients are hidden from the client filter and overview unless asked for
+
+scenario SC019 ArchivingWithOpenInvoices
+  with ActiveClient, HasOpenInvoices
+  the owner archives the client via ArchiveClient -> denied OPEN_INVOICES
+
+scenario SC016 ImportingEarlierHistory
+  "Years of earlier invoices come in as imported history; they report, they audit, they never reopen."
+  with Client "ACME", today "2026-09-01"
+  the owner imports an earlier invoice via ImportInvoice -> a new Invoice sits outside Native with its original status and dates
+  expect
+    lane "Files": the original pdf sits beside the new file under the number's year
+    lane "CLI": the audit compares the file to the pdf text field by field
+
+scenario SC017 ReopeningImported
+  with Sent, origin = imported
+  the owner reopens it via ReopenInvoice -> denied IMPORTED_FROZEN
+
+scenario SC010 ReopenAndResend
+  "A mistake after sending: back to draft, fix, send again under the same number."
+  with Sent, LineItem, origin = native
+  the owner reopens it via ReopenInvoice -> Draft
+  the owner fixes the quantities via EditDraft
+  the owner sends it again via SendInvoice -> Sent
+  checks I003
+
+scenario SC011 ReopeningPaid
+  with Paid
+  the owner reopens it via ReopenInvoice -> denied NOT_SENT
+
+scenario SC012 YearOverview
+  "The two tables the owner keeps open: every Sent invoice with what is owed, and a year's totals."
+  with Sent, today "2026-09-01"
+  expect
+    lane "Web": every Sent Invoice is listed with Client.name, sequence, sent_on, due_date, amount_due and their balance
+    lane "Web": the balance, invoiced and received totals are shown for a year, quarter or month, filterable by Client
+  checks I010
+
+scenario SC013 AuditFindsDrift
+  "The CLI audit: a sent invoice whose pdf text no longer matches its file is reported, never repaired."
+  with Sent, LineItem
+  a line amount in the stored pdf differs from the file
+  expect
+    lane "CLI": the audit lists the Invoice with the differing fields and exits non-zero
+    lane "CLI": a native and an imported Invoice are audited the same way
+  checks I003, I004, I005, I011
+
+scenario SC009 OverdueIsVisible
+  "Sent, past due, unpaid: the owner sees it at the CLI; nothing fires."
+  with Overdue, today "2026-09-15"
+  expect
+    lane "Web": the Invoice is listed as overdue with sent_on and due_date
+
+scenario SC002 SendingAnEmptyDraft
+  with Draft, Empty
+  the owner sends it via SendInvoice -> denied EMPTY_INVOICE
+
+scenario SC003 PayingBeforeSending
+  with Draft
+  the owner records a payment via MarkPaid -> denied NOT_SENT
+
+scenario SC004 EditingAfterSending
+  with Sent
+  the owner changes the quantities via EditDraft -> denied NOT_DRAFT
+
+scenario SC005 ArchivingUnpaid
+  with Sent
+  the owner archives it via ArchiveInvoice -> denied NOT_PAID
+
+scenario SC006 SendingTwice
+  with Sent
+  the owner sends it again via SendInvoice -> denied NOT_DRAFT
+
+scenario SC007 AcmeJuly2026
+  "The renderer's golden fixture: same layout as the reference invoice, fictional client data."
+  with Sent, today "2026-08-11"
+  with year = 2026
+  with sequence = 7
+  with amount_due = 47975.00
+  with Client "ACME" code "A" at "100 Market Street, Suite 400, Springfield, CA 90001, United States of America"
+  with Issuer "Example Studio LLC" tax_number "X-0000000-X" at "1 Example Street, Exampletown, 00000"
+  with terms = upon_receipt
+  with period "2026-07-01" to "2026-07-31", issue_date "2026-08-11", due_date "2026-08-11"
+  with LineItem "Avery Example" quantity "40.00" unit_price "120.00" amount "4800.00"
+  with LineItem "Blake Example" quantity "160.00" unit_price "80.00" amount "12800.00"
+  with LineItem "Casey Example" quantity "168.00" unit_price "60.00" amount "10080.00"
+  with LineItem "Drew Example" quantity "120.00" unit_price "45.00" amount "5400.00"
+  with LineItem "Emery Example" quantity "96.00" unit_price "95.00" amount "9120.00"
+  with LineItem "Finley Example" quantity "52.50" unit_price "110.00" amount "5775.00"
+  expect
+    lane "PDF": the file is "INVOICE_2026-A-07_Example_Studio_LLC.pdf"
+    lane "PDF": the invoice id reads "2026-A-07", issue date "08/11/2026", due date "08/11/2026 (upon receipt)"
+    lane "PDF": each line reads "Service", LineItem.description, LineItem.quantity, LineItem.unit_price, LineItem.amount
+    lane "PDF": amount due reads "$47,975.00"
+    lane "PDF": notes read "Services were provided remotely." and "Operation not subject to local sales tax."
+  checks I004, I005, I007, I008

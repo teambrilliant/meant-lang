@@ -1,0 +1,10 @@
+domain e54-split
+  "E54: a domain spans files — every file whose header names it. This file holds the vocabulary;
+   behavior.meant, beside it, holds what moves it. Checked together they are clean; checked alone,
+   behavior.meant cannot resolve a single concept."
+  mode model-first
+
+concept Job
+  "A unit of work."
+  dimension state = queued | done
+  field attempts: int

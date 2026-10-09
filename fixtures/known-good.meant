@@ -1,0 +1,119 @@
+domain lending
+  "A tiny lending desk: members borrow and return books; overdue loans draw one reminder."
+  mode model-first
+  state-of-record "in-memory"
+
+dimension actor = member | librarian
+
+concept DenyCode
+  "Refusal vocabulary; one code, one message."
+  field copy: string
+  values
+    LIMIT_REACHED "Members may hold at most 2 open loans."
+    NOT_OPEN "This loan is not open."
+
+concept Member
+  "A registered borrower."
+  field open_loans: int
+
+concept Book
+  "A lendable title."
+  field title: string
+
+concept Loan
+  "One borrowing of one book by one member."
+  dimension status = open | returned
+  field member: Member
+  field book: Book
+  field due_date: date
+
+concept ReminderLog
+  "Trace: one row per reminder sent for an overdue loan."
+  field loan: Loan
+
+concept ReminderNote
+  "The one friendly sentence in a reminder email. Judged, not diffed."
+  fallback "Your book is overdue."
+
+concept StaffNotes
+  "Desk-internal notes about members; never leave the desk."
+
+touchpoints
+  "Desk"
+  "Email"
+
+shape AtLoanLimit of Member
+  where open_loans >= 2
+
+shape OpenLoan of Loan
+  where status = open
+
+shape OverdueLoan of Loan
+  where status = open and due_date < today
+  wait [ReturnBook] timeout 3 days -> SendReminder
+
+shape NeverReminded of Loan
+  where no ReminderLog
+
+action BorrowBook of Member
+  "A member takes out a new loan; the due date is two weeks out."
+  by member
+  requires not AtLoanLimit else LIMIT_REACHED
+  effect
+    open_loans += 1
+    new Loan with status = open, due_date = today + 2 weeks
+    the chosen Book is recorded on the Loan undecided @alex "book binding is instance data until action parameters earn a form"
+
+action ReturnBook
+  "The member or the desk closes a loan."
+  by member, librarian
+  requires OpenLoan else NOT_OPEN
+  by member:
+    requires actor.id = member.id
+  in OverdueLoan :
+    effect
+      a late return is noted at the desk
+  effect
+    status = returned
+    the member's open loan count decreases by one
+  note "The count decrement is a related-instance write — below the recurrence bar, stays a sentence."
+  verified-by tests/lending/return.test.ts#returns
+
+action SendReminder
+  "The desk emails one reminder for an overdue loan."
+  requires OverdueLoan
+  requires NeverReminded
+  effect
+    new ReminderLog
+    new ReminderNote
+
+invariant AtMostOneReminder
+  "A loan draws at most one reminder."
+  check by execution
+
+invariant NoteNeverScolds
+  "A reminder note nudges; it never blames or shames the member."
+  check by judged
+  rubric "Does the note blame, shame, or characterize the member? Then FAIL."
+
+exposure Loan
+  to member at "Desk"
+    must-see due_date, Book.title
+  to librarian at "Desk"
+    must-see due_date, Book.title, ReminderLog
+  to member at "Email"
+    must-see due_date
+    must-not-see StaffNotes
+
+scenario BorrowAtTheLimit
+  with AtLoanLimit
+  the member borrows "Dune" via BorrowBook -> denied LIMIT_REACHED
+
+scenario OverdueDrawsAReminder (planned)
+  with OverdueLoan, today "2026-03-10"
+  three days pass without a return
+  the reminder goes out via SendReminder
+  expect
+    lane "Email": due_date and the ReminderNote reach the member
+    lane "Desk": ReminderLog visible to the librarian
+  checks AtMostOneReminder

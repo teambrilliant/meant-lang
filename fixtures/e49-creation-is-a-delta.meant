@@ -1,0 +1,21 @@
+domain e49
+  "Instance creation is a delta — `new <Concept> with <assignments>` (E49)."
+  mode model-first
+
+concept Subscription
+  dimension status = active | cancelled
+
+concept Billing
+  dimension fulfillment = ship | none
+  field subscription: Subscription
+
+shape Active of Subscription
+  where status = active
+
+action BillNow of Subscription
+  requires Active
+  effect
+    new Billing with fulfillment = ship
+    new Billing with fulfillment = teleport  # EXPECT: V3
+    new Billing with cadence = ship  # EXPECT: V4
+    new Invoice  # EXPECT: V2

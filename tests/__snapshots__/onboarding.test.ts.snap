@@ -1,0 +1,26 @@
+// Bun Snapshot v1, https://bun.sh/docs/test/snapshots
+
+exports[`layer 0 fits the budget and lists every command once 1`] = `
+"meant 0.1.0 — business intent and behavior
+
+A Meant model describes what an application should do.
+People decide the behavior; agents help author the model;
+engineers choose the implementation. The toolkit checks models deterministically.
+Model files: .meant, or \`\`\`meant fences in .md.
+
+Agent bootstrap:
+  1. Read \`meant skill\` into context (persist it: \`meant skill install\`).
+  2. Loop: edit → \`meant check <model dir> --json\` → fix errors → \`meant fmt <file>\`.
+  3. Depth on demand: \`meant check --explain <LAW>\` · \`meant spec <section>\`.
+  4. Modeling an existing app: read the "Starting from code" section of \`meant skill\`.
+
+Commands
+  check <paths> [--json] [--explain <LAW>]   parse/resolve/laws; exit 1 iff errors
+  fmt <paths> [--check]                      canonical form; --check exits 1 on drift
+  sim <paths> [--json]                       witness / probe / replay verdicts
+  report <paths> [--json]                    opacity, patterns, candidates, questions
+  skill [install]                            agent editing discipline (stdout, or write .claude/skills/)
+  spec [<section> | --all]                   the normative grammar (TOC by default)
+  hook                                       PostToolUse hook: stdin JSON -> diagnostics feedback
+"
+`;

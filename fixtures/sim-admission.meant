@@ -1,0 +1,45 @@
+domain sim-admission
+  "A planted admission mismatch: a scenario has a role invoking an action that
+   declares no `by` list. Deny-by-default is structural (§4.6) — the absence of `by` means
+   system-triggered, so the step cannot happen as written, and only replay notices."
+  mode model-first
+
+dimension actor = customer | admin
+
+concept DenyCode
+  "Refusal vocabulary."
+  field copy: string
+  values
+    NOT_ACTIVE "This subscription is not active."
+
+concept Subscription
+  "The billing contract."
+  dimension status = active | cancelled
+
+shape Active of Subscription
+  where status = active
+
+shape Cancelled of Subscription
+  where status = cancelled
+
+action Reconcile of Subscription
+  "System-triggered: the cycle boundary reconciles. No `by`, so no role may invoke it."
+  effect
+    status = cancelled
+
+action Cancel of Subscription
+  "The customer cancels."
+  by customer
+  requires Active else NOT_ACTIVE
+  effect
+    status = cancelled
+
+scenario CustomerReconciles
+  "The plant: `customer` fires a system-only action."
+  with Active
+  the customer reconciles via Reconcile  # SIM-EXPECT: falsified CustomerReconciles#1
+
+scenario CancelWhenCancelled
+  "The control: a real denial, with its code."
+  with Cancelled
+  the customer cancels via Cancel -> denied NOT_ACTIVE  # SIM-EXPECT: denied NOT_ACTIVE

@@ -1,0 +1,20 @@
+domain e33
+  "A domain with no actor dimension is a legal system-only domain (E33) — this file is clean."
+  mode model-first
+
+concept Job
+  dimension state = queued | done
+  field attempts: int
+
+shape Queued of Job
+  where state = queued
+
+action RunJob of Job
+  requires Queued
+  effect
+    attempts += 1
+    state = done
+
+scenario JobRuns
+  with Queued
+  the job runs via RunJob

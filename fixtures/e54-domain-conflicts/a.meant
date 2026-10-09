@@ -1,0 +1,9 @@
+domain e54-conflicts
+  "E54 plants: clauses may sit in any file of a domain, but one key carries one value; names stay
+   unique across files."
+  mode model-first
+  state-of-record "in-memory"
+
+concept Customer
+  "Someone who pays."
+  field name: string

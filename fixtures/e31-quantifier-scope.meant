@@ -1,0 +1,25 @@
+domain e31
+  "Quantifiers auto-scope through the quantified concept's unique subject-typed relation (E31)."
+  mode model-first
+
+concept Subscription
+  dimension status = active | cancelled
+
+concept Shadow
+  dimension state = pending | applied
+  field subscription: Subscription
+
+concept Unrelated
+  field label: string
+
+shape HasPendingShadow of Subscription
+  where some Shadow where state = pending
+
+shape Detached of Subscription
+  where no Unrelated  # EXPECT: V4
+
+action Cancel of Subscription
+  requires HasPendingShadow
+  requires Detached
+  effect
+    status = cancelled

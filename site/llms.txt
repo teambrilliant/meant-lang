@@ -1,0 +1,41 @@
+# Meant Lang
+
+> Meant Lang is a small, checkable language for how an application should behave: who can act, under what conditions, and what changes. People decide the behavior, coding agents draft the model, and the deterministic `meant` toolkit checks it. Engineers choose the implementation.
+
+Developer preview, MIT license. Requires Bun 1.4 or later. Model files use the `.meant` extension, or ```` ```meant ```` fences in Markdown.
+
+## Start from your codebase
+
+Install the CLI:
+
+```
+bun add -g meant-lang
+```
+
+Then give your coding agent one prompt that names one workflow:
+
+```
+Run `meant` and follow its instructions to build a Meant model of the <workflow> workflow in this app.
+```
+
+The agent reads its modeling instructions from the CLI, mines that workflow's code into `.meant/model.meant`, proposes vocabulary with file:line evidence for your verdict, and runs check, sim and report. You review the model, its falsified claims, and its open questions.
+
+## Docs
+
+- [Documentation](https://meantlang.dev/docs/): your first model, working with an agent, what verification covers
+- [Start from your codebase](https://meantlang.dev/docs/#from-code): install, the one prompt, what the agent does, what you review
+- [Command and language reference](https://meantlang.dev/docs/reference/): check, sim, report, fmt, skill, spec, hook
+- [Example: sending an invoice](https://meantlang.dev/examples/invoicing/): a complete model with recorded results
+
+## Agent references
+
+- [Modeling instructions](https://meantlang.dev/skill.md): the output of `meant skill`
+- [Normative grammar](https://meantlang.dev/spec.md): the output of `meant spec --all`
+- [Example model](https://meantlang.dev/examples/invoicing.meant)
+- [Recorded simulation of the example](https://meantlang.dev/examples/invoicing.result.json): `meant sim --json` output
+- [Everything above in one file](https://meantlang.dev/llms-full.txt)
+
+## Optional
+
+- [Source repository](https://github.com/teambrilliant/meant-lang)
+- [Issues](https://github.com/teambrilliant/meant-lang/issues)

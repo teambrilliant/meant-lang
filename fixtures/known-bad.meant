@@ -1,0 +1,73 @@
+domain lending-bad
+  "Deliberately broken twin of the lending desk."
+  mode model-first
+
+dimension actor = member | librarian
+
+concept DenyCode
+  "Refusal vocabulary."
+  field copy: string
+  values
+    LIMIT_REACHED "Members may hold at most 2 open loans."
+    SILENT_CODE  # EXPECT: V6
+
+concept Member
+  "A borrower."
+  field open_loans: int
+  field member_id: string  # EXPECT: L-id-string
+
+concept Loan
+  "One borrowing."
+  dimension status = open | returned
+  field member: Member
+  field due_date: date
+  field is_late: bool  # EXPECT: L-bool
+
+concept Loan  # EXPECT: V1
+  "Duplicate declaration."
+
+touchpoints
+  "Desk"
+
+shape AtLoanLimit of Member
+  where open_loans >= 2
+
+shape OpenLoan of Loan
+  where status = open
+
+shape OverdueLoan of Loan
+  where status = pending and due_date < today  # EXPECT: V3
+  wait [LostBook] timeout 3 days -> SendReminder  # EXPECT: V5
+
+shape Confused of Loan
+  where due_date + open_loans = today  # EXPECT: V4
+
+action BorrowBook of Member
+  "Broken gates."
+  by member
+  requires actor.id = member.id  # EXPECT: V14, V4
+  requires not AtLoanLimit else OVER_LIMIT  # EXPECT: V2
+  by librarian:  # EXPECT: V14
+    requires OpenLoan  # EXPECT: V9
+  effect
+    open_loans += 1
+
+action SendReminder
+  "Subjectless."
+  requires OverdueLoan
+  effect
+    the Reminder is dispatched to the member  # EXPECT: V8
+  undecided "who owns reminder copy"  # EXPECT: V13
+
+invariant NoteNeverScolds
+  "Judged without machinery."
+  check by judged  # EXPECT: V7
+
+exposure Loan
+  to member at "Desk"
+    must-see due_date, return_address  # EXPECT: V11
+
+scenario GhostFlow (planned)
+  with OpenLoan
+  the loan returns via ReturnBook  # EXPECT: V2
+  verified-by tests/lending/ghost.test.ts  # EXPECT: V10

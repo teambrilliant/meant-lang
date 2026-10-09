@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Documentation | Meant Lang</title>
+  <meta name="description" content="A practical introduction to modeling business intent, reading checked rules, and keeping engineering decisions separate.">
+  <link rel="stylesheet" href="/style.css">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231837e5'/%3E%3Cpath d='M11 8H7v16h4m10-16h4v16h-4M13 16h6' fill='none' stroke='white' stroke-width='2.5'/%3E%3C/svg%3E">
+<meta property="og:type" content="website"><meta property="og:site_name" content="Meant Lang"><meta property="og:title" content="Documentation | Meant Lang"><meta property="og:description" content="A practical introduction to modeling business intent, reading checked rules, and keeping engineering decisions separate."><meta property="og:url" content="https://meantlang.dev/docs/"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="Documentation | Meant Lang"><meta name="twitter:description" content="A practical introduction to modeling business intent, reading checked rules, and keeping engineering decisions separate."><link rel="canonical" href="https://meantlang.dev/docs/"></head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="header wrap"><a class="wordmark" href="/"><span class="mark" aria-hidden="true">[·]</span><span data-brand>Meant<span class="brand-lang"> Lang</span></span></a><nav aria-label="Main navigation"><a href="/">Overview</a><a href="/examples/invoicing/">Example</a><a href="/docs/reference/">Reference</a></nav></header>
+<div class="docs-layout wrap">
+  <nav class="docs-nav" aria-label="Documentation sections"><a href="#main">Introduction</a><a href="#first-model">Your first model</a><a href="#vocabulary">Read the vocabulary</a><a href="#engineering">Engineering decisions</a><a href="#agents">Work with an agent</a><a href="#from-code">Start from your codebase</a><a href="#verification">Verification and limits</a><a href="#commands">Current toolkit</a><a href="#status">Project status</a></nav>
+  <main id="main" class="docs-content">
+    <span class="label">Language guide / developer preview</span>
+    <h1>Make business intent <br>explicit.</h1>
+    <p>Meant is a domain-specific language that describes business intent and observable application behavior: who can act, which conditions must hold, and what an action changes. It gives product people, engineers, and coding agents a shared model to inspect.</p>
+    <p>The model is separate from the implementation. An engineer chooses architecture, frameworks, storage, and delivery mechanisms based on experience, existing systems, operational constraints, and preferences. Application tests must establish that those choices preserve the agreed behavior.</p>
+    <div class="doc-paths"><a href="/examples/invoicing/"><span class="label">01 / Read a complete model</span><strong>Sending an invoice ↗</strong><span>Rules, declarations, scenarios, and recorded evidence.</span></a><a href="/docs/reference/"><span class="label">02 / Understand the toolkit</span><strong>Commands &amp; language reference ↗</strong><span>What each command checks and what it reports.</span></a></div><div class="callout"><p>Start with one workflow whose rules you want to discuss or preserve. You can model the rest of the application later.</p></div>
+
+    <h2 id="first-model">Your first model: sending an invoice</h2>
+    <p>Agree on four business rules: only the owner may send an invoice; it must be a draft; it needs at least one line item; and sending changes its status to sent.</p>
+    <p><a href="/examples/invoicing.meant" download>Download the complete model</a>. This example covers sending an invoice. Creation, editing, and later actions are outside its scope.</p>
+    <pre><code>dimension actor = owner | client
+
+concept Invoice
+  dimension status = draft | sent
+
+concept LineItem
+  field invoice: Invoice
+
+shape Draft of Invoice
+  where status = draft
+
+shape Empty of Invoice
+  where no LineItem
+
+action SendInvoice of Invoice
+  "The owner sends an invoice."
+  by owner
+  requires Draft else NOT_DRAFT
+  requires not Empty else EMPTY_INVOICE
+  effect
+    status = sent</code></pre>
+    <p>The excerpt above omits the domain header, refusal-code declarations, the <code>Sent</code> shape, and scenarios. They are all present in the downloadable file.</p>
+    <h3>Make an expectation explicit</h3>
+    <pre><code>scenario SendingAnEmptyDraft
+  with Draft, Empty
+  the owner sends it via SendInvoice -&gt; denied EMPTY_INVOICE</code></pre>
+    <p>The simulator reproduces the refusal. The complete example also exercises sending a non-empty draft and attempting to send an already sent invoice.</p>
+    <table><thead><tr><th>Scenario</th><th>Recorded model result</th></tr></thead><tbody><tr><td>Send a draft with a line item</td><td>Lands in <code>Sent</code></td></tr><tr><td>Send an empty draft</td><td>Denied <code>EMPTY_INVOICE</code></td></tr><tr><td>Send an already sent invoice</td><td>Denied <code>NOT_DRAFT</code></td></tr></tbody></table>
+    <p>These results were recorded from the CLI. The page does not run the checker. <a href="/examples/invoicing.result.json">Inspect the full simulation output</a>.</p>
+    <p>The structural check has no errors or warnings and two informational notices. Simulation also warns that this slice does not model how invoices become draft or empty, and reports that <code>Sent</code> has no computable exit. The full result includes these messages.</p>
+
+    <h2 id="vocabulary">Read the vocabulary</h2>
+    <table><thead><tr><th>Construct</th><th>Meaning in the business model</th></tr></thead><tbody><tr><td><code>concept</code></td><td>A thing the business talks about, such as an invoice or membership.</td></tr><tr><td><code>dimension</code></td><td>A closed set of meaningful values, such as draft or sent.</td></tr><tr><td><code>shape</code></td><td>A condition over the world. Shapes may overlap: an invoice can be both draft and empty.</td></tr><tr><td><code>action</code></td><td>Who may act, the preconditions, refusal reasons, and effects.</td></tr><tr><td><code>scenario</code></td><td>A concrete sequence with expected outcomes.</td></tr><tr><td><code>invariant</code></td><td>A claim that should hold, with its declared verification approach. A declaration alone does not execute a test.</td></tr><tr><td><code>touchpoints</code> / <code>exposure</code></td><td>Where users or other systems interact with the application, and what information they can see.</td></tr></tbody></table>
+    <p>Names refer to declarations in the model. For example, <code>NOT_DRAFT</code> belongs to the declared refusal vocabulary. The simulator executes supported conditions and effects. Prose it cannot execute remains unverified.</p>
+
+    <h2 id="engineering">Keep engineering decisions explicit, too</h2>
+    <p>An engineer can implement the invoice rules in a monolith, a service backed by a queue, or an existing application. Each design has different performance, deployment, maintenance, and failure handling. All must enforce the same sending rules.</p>
+    <p>Write the technical design separately: the stack, storage representation, interfaces, transactional boundaries, retry behavior, and operational constraints. Use the business model as input to that design. If a technical constraint requires different observable behavior, bring that change back to the people who own the requirements.</p>
+    <p>Specify and test usability, appearance, performance, security, and engineering quality separately from this business model.</p>
+
+    <h2 id="agents">Work with an agent</h2>
+    <ol><li>Agree on the intended behavior with the people responsible for the product.</li><li>Give the agent the modeling discipline and ask it to draft a focused model.</li><li>Run structural checks. Let the agent fix mechanical issues such as unresolved references and malformed syntax.</li><li>Review changes to the meaning yourself. An agent must not weaken a requirement to make a check pass.</li><li>Run simulation and reports. Inspect counterexamples, unverified prose, and unresolved questions.</li><li>Choose the technical design, implement it, and test the application against the agreed behavior.</li></ol>
+    <p>The toolkit includes modeling instructions, a Claude Code skill installer, and a hook that checks edited model files. Application-code and runtime checks remain separate.</p>
+
+    <h2 id="from-code">Start from your codebase</h2>
+    <p>You don't have to write the first model by hand. Install the CLI, then give your coding agent one prompt that names one workflow, such as sending an invoice.</p>
+    <pre><code>bun add -g meant-lang</code></pre>
+    <pre class="prompt"><code>Run `meant` and follow its instructions to build a Meant model of the &lt;workflow&gt; workflow in this app.</code></pre>
+    <p>Running <code>meant</code> prints a short bootstrap that points the agent to its <a href="/skill.md">modeling instructions</a>. From there the agent:</p>
+    <ol><li>Stays inside the workflow you named.</li><li>Creates <code>.meant/model.meant</code> in code-first mode, where the running code is presumed right, and starts <code>.meant/history.md</code>, a numbered log of model changes.</li><li>Reads that workflow's code (permission checks, stored entities, status fields, handlers, guard clauses, writes, and tests) and cites the file and line behind each inference.</li><li>Proposes new vocabulary for your decision instead of adding it, and marks contradictions as <code>undecided</code>.</li><li>Runs check, sim, and report until the model is well-formed.</li><li>Installs the modeling skill and the edit hook, and notes the model in the repository's agent instructions.</li></ol>
+    <p>You review the model, the vocabulary it proposed, any falsified claims, and the open questions. The model describes the behavior the code appears to implement. Whether that behavior is right is still your decision.</p>
+
+    <h2 id="verification">Understand verification and its limits</h2>
+    <table><thead><tr><th>Result</th><th>How to read it</th></tr></thead><tbody><tr><td>Structural check passes</td><td>The model satisfies the implemented grammar, reference, and law checks. The requirements can still be wrong.</td></tr><tr><td><code>verified</code></td><td>Read the verdict kind: a witness establishes a satisfiable example; a replay checks a scenario; a passing probe is bounded by its searched scope.</td></tr><tr><td><code>falsified</code></td><td>A counterexample disproves a modeled claim. Inspect the evidence and review the intended meaning.</td></tr><tr><td><code>derived</code></td><td>The modeled effects can produce a transition. A possible transition is different from a claim that it always occurs.</td></tr><tr><td><code>dead</code></td><td>No satisfying witness was found within scope.</td></tr><tr><td><code>unprobeable</code></td><td>The tool cannot establish the claim mechanically, for example because effects are opaque or an exit is not modeled.</td></tr><tr><td><code>skipped</code></td><td>The expectation is outside the supported execution scope.</td></tr></tbody></table>
+    <p>The checks run without an LLM. Simulation covers a bounded scope; application tests must establish that the implementation follows the model.</p>
+    <p><code>verified-by</code> currently records an anchor to an application test. The CLI does not execute that referenced test. Automatic model-based application testing and runtime enforcement are future work.</p>
+
+    <h2 id="commands">Current toolkit</h2>
+    <p>The toolkit uses the <code>meant</code> executable and the <code>.meant</code> extension. It needs Bun 1.4 or later.</p>
+    <pre><code>bun add -g meant-lang
+
+meant check path/to/model.meant --json
+meant sim path/to/model.meant --json
+meant report path/to/model.meant --json
+meant fmt path/to/model.meant --check
+
+meant skill
+meant spec</code></pre>
+    <p><code>check</code> validates structure and references. <code>sim</code> explores supported behavior. <code>report</code> exposes unverified prose and questions. <code>fmt</code> provides canonical formatting. <code>skill</code> prints the agent discipline, and <code>spec</code> provides the normative language reference.</p>
+
+    <h2 id="status">Project status</h2>
+    <p>Meant Lang is a developer preview from <a href="https://www.teambrilliant.ai/">TeamBrilliant</a>.</p>
+    <p>The toolkit includes structural checking, formatting, bounded simulation, reports, and model-edit feedback for agents. Commands and diagnostics may change between preview releases.</p>
+    <p>The source is on <a href="https://github.com/teambrilliant/meant-lang">GitHub</a> under the <a href="https://github.com/teambrilliant/meant-lang/blob/main/LICENSE">MIT license</a>. Report problems in <a href="https://github.com/teambrilliant/meant-lang/issues">GitHub issues</a>.</p>
+    <p><a href="/docs/reference/">Read the command reference</a> for flags and exit behavior.</p>
+
+  </main>
+</div>
+<footer class="footer wrap"><a class="wordmark" href="/"><span class="mark" aria-hidden="true">[·]</span><span data-brand>Meant<span class="brand-lang"> Lang</span></span></a><span>Built by <a href="https://www.teambrilliant.ai/">TeamBrilliant</a></span><span><a href="https://github.com/teambrilliant/meant-lang">Source</a> · <a href="https://github.com/teambrilliant/meant-lang/blob/main/LICENSE">MIT license</a></span><a href="/">Back to overview</a></footer>
+</body>
+</html>

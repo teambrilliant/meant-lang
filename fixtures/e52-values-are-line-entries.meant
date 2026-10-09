@@ -1,0 +1,18 @@
+domain e52
+  "`values` has one form: line entries; `|` is dimension syntax only (E52)."
+  mode model-first
+
+concept Metric
+  values
+    time_to_first_review | time_to_merge                 # EXPECT: P
+
+concept Subscription
+  dimension status = active | cancelled
+
+shape Active of Subscription
+  where status = active
+
+action Cancel of Subscription
+  requires Active
+  effect
+    status = cancelled

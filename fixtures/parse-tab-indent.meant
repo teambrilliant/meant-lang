@@ -1,0 +1,9 @@
+domain parse-tab
+  "Tabs are illegal (§17); recovery keeps the rest of the file."
+  mode model-first
+
+concept Thing
+	field label: string                                    # EXPECT: P
+
+concept Other
+  field label: string

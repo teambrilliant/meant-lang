@@ -1,0 +1,24 @@
+domain e27
+  "Deny codes are declared vocabulary (E27): one code, one copy."
+  mode model-first
+
+dimension actor = customer
+
+concept DenyCode
+  field copy: string
+  values
+    NOT_ACTIVE "This subscription is not active."
+    SILENT  # EXPECT: V6
+
+concept Subscription
+  dimension status = active | cancelled
+
+shape Active of Subscription
+  where status = active
+
+action Cancel of Subscription
+  by customer
+  requires Active else NOT_ACTIVE
+  requires Active else NEVER_DECLARED  # EXPECT: V2
+  effect
+    status = cancelled

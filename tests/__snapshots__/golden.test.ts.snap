@@ -1,0 +1,1903 @@
+// Bun Snapshot v1, https://bun.sh/docs/test/snapshots
+
+exports[`check fixtures/discovery-held-change.meant 1`] = `
+[
+  {
+    "code": "L-no-writer",
+    "file": "fixtures/discovery-held-change.meant",
+    "fix": "declare the action that moves it, or drop the field",
+    "law": "L-no-writer",
+    "message": "No action writes \`Membership.member_name\`.",
+    "range": {
+      "end": {
+        "col": 20,
+        "line": 12,
+      },
+      "start": {
+        "col": 9,
+        "line": 12,
+      },
+    },
+    "severity": "info",
+  },
+  {
+    "code": "L-unref-shape",
+    "file": "fixtures/discovery-held-change.meant",
+    "fix": "gate an action on it, branch on it, or delete it",
+    "law": "L-unref-shape",
+    "message": "\`PendingHold\` is declared but never referenced.",
+    "range": {
+      "end": {
+        "col": 18,
+        "line": 24,
+      },
+      "start": {
+        "col": 7,
+        "line": 24,
+      },
+    },
+    "severity": "info",
+  },
+  {
+    "code": "L-unref-action",
+    "file": "fixtures/discovery-held-change.meant",
+    "fix": "exercise it in a scenario, or delete it",
+    "law": "L-unref-action",
+    "message": "\`RequestPause\` is declared but never referenced by a scenario, fuse, or sentence.",
+    "range": {
+      "end": {
+        "col": 20,
+        "line": 27,
+      },
+      "start": {
+        "col": 8,
+        "line": 27,
+      },
+    },
+    "severity": "info",
+  },
+  {
+    "code": "L-unref-action",
+    "file": "fixtures/discovery-held-change.meant",
+    "fix": "exercise it in a scenario, or delete it",
+    "law": "L-unref-action",
+    "message": "\`RequestCancel\` is declared but never referenced by a scenario, fuse, or sentence.",
+    "range": {
+      "end": {
+        "col": 21,
+        "line": 34,
+      },
+      "start": {
+        "col": 8,
+        "line": 34,
+      },
+    },
+    "severity": "info",
+  },
+  {
+    "code": "L-unref-action",
+    "file": "fixtures/discovery-held-change.meant",
+    "fix": "exercise it in a scenario, or delete it",
+    "law": "L-unref-action",
+    "message": "\`RequestSwitch\` is declared but never referenced by a scenario, fuse, or sentence.",
+    "range": {
+      "end": {
+        "col": 21,
+        "line": 41,
+      },
+      "start": {
+        "col": 8,
+        "line": 41,
+      },
+    },
+    "severity": "info",
+  },
+  {
+    "code": "L-unref-action",
+    "file": "fixtures/discovery-held-change.meant",
+    "fix": "exercise it in a scenario, or delete it",
+    "law": "L-unref-action",
+    "message": "\`ApplyHeldChange\` is declared but never referenced by a scenario, fuse, or sentence.",
+    "range": {
+      "end": {
+        "col": 23,
+        "line": 47,
+      },
+      "start": {
+        "col": 8,
+        "line": 47,
+      },
+    },
+    "severity": "info",
+  },
+]
+`;
+
+exports[`check fixtures/discovery-noise-cap.meant 1`] = `
+[
+  {
+    "code": "L-unref-shape",
+    "file": "fixtures/discovery-noise-cap.meant",
+    "fix": "gate an action on it, branch on it, or delete it",
+    "law": "L-unref-shape",
+    "message": "\`OpenTicket\` is declared but never referenced.",
+    "range": {
+      "end": {
+        "col": 17,
+        "line": 11,
+      },
+      "start": {
+        "col": 7,
+        "line": 11,
+      },
+    },
+    "severity": "info",
+  },
+  {
+    "code": "L-unref-action",
+    "file": "fixtures/discovery-noise-cap.meant",
+    "fix": "exercise it in a scenario, or delete it",
+    "law": "L-unref-action",
+    "message": "\`NudgeAssignee\` is declared but never referenced by a scenario, fuse, or sentence.",
+    "range": {
+      "end": {
+        "col": 21,
+        "line": 17,
+      },
+      "start": {
+        "col": 8,
+        "line": 17,
+      },
+    },
+    "severity": "info",
+  },
+  {
+    "code": "L-unref-action",
+    "file": "fixtures/discovery-noise-cap.meant",
+    "fix": "exercise it in a scenario, or delete it",
+    "law": "L-unref-action",
+    "message": "\`EscalateTicket\` is declared but never referenced by a scenario, fuse, or sentence.",
+    "range": {
+      "end": {
+        "col": 22,
+        "line": 25,
+      },
+      "start": {
+        "col": 8,
+        "line": 25,
+      },
+    },
+    "severity": "info",
+  },
+]
+`;
+
+exports[`check fixtures/e27-deny-codes.meant 1`] = `
+[
+  {
+    "code": "L-dim-single-consumer",
+    "file": "fixtures/e27-deny-codes.meant",
+    "fix": "consume it, or delete it",
+    "law": "L-dim-single-consumer",
+    "message": "\`dimension actor\` has 1 consumer — dead-or-nestable vocabulary (§4.2).",
+    "range": {
+      "end": {
+        "col": 16,
+        "line": 5,
+      },
+      "start": {
+        "col": 11,
+        "line": 5,
+      },
+    },
+    "severity": "info",
+  },
+  {
+    "code": "deny-code-without-copy",
+    "file": "fixtures/e27-deny-codes.meant",
+    "fix": "add the message: \`CODE "…"\`",
+    "law": "V6",
+    "message": "\`SILENT\` carries no copy — a code cannot exist without its message (E27).",
+    "range": {
+      "end": {
+        "col": 11,
+        "line": 11,
+      },
+      "start": {
+        "col": 5,
+        "line": 11,
+      },
+    },
+    "severity": "error",
+  },
+  {
+    "code": "L-unref-action",
+    "file": "fixtures/e27-deny-codes.meant",
+    "fix": "exercise it in a scenario, or delete it",
+    "law": "L-unref-action",
+    "message": "\`Cancel\` is declared but never referenced by a scenario, fuse, or sentence.",
+    "range": {
+      "end": {
+        "col": 14,
+        "line": 19,
+      },
+      "start": {
+        "col": 8,
+        "line": 19,
+      },
+    },
+    "severity": "info",
+  },
+  {
+    "code": "unresolved-ref",
+    "file": "fixtures/e27-deny-codes.meant",
+    "fix": "add it under \`concept DenyCode\`'s \`values\`",
+    "law": "V2",
+    "message": "\`NEVER_DECLARED\` is not a declared DenyCode value.",
+    "range": {
+      "end": {
+        "col": 38,
+        "line": 22,
+      },
+      "start": {
+        "col": 24,
+        "line": 22,
+      },
+    },
+    "severity": "error",
+  },
+]
+`;
+
+exports[`check fixtures/e30-bool-is-a-dimension.meant 1`] = `
+[
+  {
+    "code": "L-bool",
+    "file": "fixtures/e30-bool-is-a-dimension.meant",
+    "fix": "consider \`dimension payment_issue = … | …\`",
+    "law": "L-bool",
+    "message": "\`payment_issue\` is a bool — when its two states carry domain meaning it is a disguised two-value dimension (E30).",
+    "range": {
+      "end": {
+        "col": 22,
+        "line": 7,
+      },
+      "start": {
+        "col": 9,
+        "line": 7,
+      },
+    },
+    "severity": "info",
+  },
+  {
+    "code": "L-no-writer",
+    "file": "fixtures/e30-bool-is-a-dimension.meant",
+    "fix": "declare the action that moves it, or drop the field",
+    "law": "L-no-writer",
+    "message": "No action writes \`Subscription.payment_issue\`.",
+    "range": {
+      "end": {
+        "col": 22,
+        "line": 7,
+      },
+      "start": {
+        "col": 9,
+        "line": 7,
+      },
+    },
+    "severity": "info",
+  },
+  {
+    "code": "L-unref-action",
+    "file": "fixtures/e30-bool-is-a-dimension.meant",
+    "fix": "exercise it in a scenario, or delete it",
+    "law": "L-unref-action",
+    "message": "\`Cancel\` is declared but never referenced by a scenario, fuse, or sentence.",
+    "range": {
+      "end": {
+        "col": 14,
+        "line": 12,
+      },
+      "start": {
+        "col": 8,
+        "line": 12,
+      },
+    },
+    "severity": "info",
+  },
+]
+`;
+
+exports[`check fixtures/e31-quantifier-scope.meant 1`] = `
+[
+  {
+    "code": "L-no-writer",
+    "file": "fixtures/e31-quantifier-scope.meant",
+    "fix": "declare the action that moves it, or drop the field",
+    "law": "L-no-writer",
+    "message": "No action writes \`Shadow.subscription\`.",
+    "range": {
+      "end": {
+        "col": 21,
+        "line": 10,
+      },
+      "start": {
+        "col": 9,
+        "line": 10,
+      },
+    },
+    "severity": "info",
+  },
+  {
+    "code": "L-no-writer",
+    "file": "fixtures/e31-quantifier-scope.meant",
+    "fix": "declare the action that moves it, or drop the field",
+    "law": "L-no-writer",
+    "message": "No action writes \`Unrelated.label\`.",
+    "range": {
+      "end": {
+        "col": 14,
+        "line": 13,
+      },
+      "start": {
+        "col": 9,
+        "line": 13,
+      },
+    },
+    "severity": "info",
+  },
+  {
+    "code": "quantifier-scope",
+    "file": "fixtures/e31-quantifier-scope.meant",
+    "fix": "declare \`field subscription: Subscription\` on Unrelated",
+    "law": "V4",
+    "message": "A quantifier auto-scopes through Unrelated's unique Subscription-typed field; Unrelated declares none (E31).",
+    "range": {
+      "end": {
+        "col": 21,
+        "line": 19,
+      },
+      "start": {
+        "col": 12,
+        "line": 19,
+      },
+    },
+    "severity": "error",
+  },
+  {
+    "code": "L-unref-action",
+    "file": "fixtures/e31-quantifier-scope.meant",
+    "fix": "exercise it in a scenario, or delete it",
+    "law": "L-unref-action",
+    "message": "\`Cancel\` is declared but never referenced by a scenario, fuse, or sentence.",
+    "range": {
+      "end": {
+        "col": 14,
+        "line": 21,
+      },
+      "start": {
+        "col": 8,
+        "line": 21,
+      },
+    },
+    "severity": "info",
+  },
+]
+`;
+
+exports[`check fixtures/e33-system-only-domain.meant 1`] = `[]`;
+
+exports[`check fixtures/e35-id-string-field.meant 1`] = `
+[
+  {
+    "code": "L-id-string",
+    "file": "fixtures/e35-id-string-field.meant",
+    "fix": "declare the concept-typed relation and compare identities with \`.id\`",
+    "law": "L-id-string",
+    "message": "\`customer_id\` is an id-shaped string — a relation in costume (E35).",
+    "range": {
+      "end": {
+        "col": 20,
+        "line": 9,
+      },
+      "start": {
+        "col": 9,
+        "line": 9,
+      },
+    },
+    "severity": "info",
+  },
+  {
+    "code": "L-no-writer",
+    "file": "fixtures/e35-id-string-field.meant",
+    "fix": "declare the action that moves it, or drop the field",
+    "law": "L-no-writer",
+    "message": "No action writes \`Subscription.customer_id\`.",
+    "range": {
+      "end": {
+        "col": 20,
+        "line": 9,
+      },
+      "start": {
+        "col": 9,
+        "line": 9,
+      },
+    },
+    "severity": "info",
+  },
+  {
+    "code": "L-unref-action",
+    "file": "fixtures/e35-id-string-field.meant",
+    "fix": "exercise it in a scenario, or delete it",
+    "law": "L-unref-action",
+    "message": "\`Cancel\` is declared but never referenced by a scenario, fuse, or sentence.",
+    "range": {
+      "end": {
+        "col": 14,
+        "line": 14,
+      },
+      "start": {
+        "col": 8,
+        "line": 14,
+      },
+    },
+    "severity": "info",
+  },
+]
+`;
+
+exports[`check fixtures/e36-ambiguous-subject.meant 1`] = `
+[
+  {
+    "code": "L-no-writer",
+    "file": "fixtures/e36-ambiguous-subject.meant",
+    "fix": "declare the action that moves it, or drop the field",
+    "law": "L-no-writer",
+    "message": "No action writes \`Addon.subscription\`.",
+    "range": {
+      "end": {
+        "col": 21,
+        "line": 10,
+      },
+      "start": {
+        "col": 9,
+        "line": 10,
+      },
+    },
+    "severity": "info",
+  },
+  {
+    "code": "L-unref-action",
+    "file": "fixtures/e36-ambiguous-subject.meant",
+    "fix": "exercise it in a scenario, or delete it",
+    "law": "L-unref-action",
+    "message": "\`CancelSomething\` is declared but never referenced by a scenario, fuse, or sentence.",
+    "range": {
+      "end": {
+        "col": 23,
+        "line": 18,
+      },
+      "start": {
+        "col": 8,
+        "line": 18,
+      },
+    },
+    "severity": "info",
+  },
+  {
+    "code": "subject-mixed",
+    "file": "fixtures/e36-ambiguous-subject.meant",
+    "fix": "pin the subject with \`of <Concept>\`",
+    "law": "V9",
+    "message": "Shape refs on \`CancelSomething\` mix subjects (Subscription, Addon) — an action has exactly one (E36).",
+    "range": {
+      "end": {
+        "col": 30,
+        "line": 19,
+      },
+      "start": {
+        "col": 12,
+        "line": 19,
+      },
+    },
+    "severity": "error",
+  },
+  {
+    "code": "subject-mixed",
+    "file": "fixtures/e36-ambiguous-subject.meant",
+    "fix": "pin the subject with \`of <Concept>\`",
+    "law": "V9",
+    "message": "Shape refs on \`CancelSomething\` mix subjects (Subscription, Addon) — an action has exactly one (E36).",
+    "range": {
+      "end": {
+        "col": 21,
+        "line": 20,
+      },
+      "start": {
+        "col": 12,
+        "line": 20,
+      },
+    },
+    "severity": "error",
+  },
+  {
+    "code": "subject-undeterminable",
+    "file": "fixtures/e36-ambiguous-subject.meant",
+    "fix": "pin it with \`of <Concept>\`",
+    "law": "V9",
+    "message": "\`Orphan\` has no \`of\` and no shape ref to infer a subject from (E36).",
+    "range": {
+      "end": {
+        "col": 14,
+        "line": 24,
+      },
+      "start": {
+        "col": 8,
+        "line": 24,
+      },
+    },
+    "severity": "error",
+  },
+  {
+    "code": "L-unref-action",
+    "file": "fixtures/e36-ambiguous-subject.meant",
+    "fix": "exercise it in a scenario, or delete it",
+    "law": "L-unref-action",
+    "message": "\`Orphan\` is declared but never referenced by a scenario, fuse, or sentence.",
+    "range": {
+      "end": {
+        "col": 14,
+        "line": 24,
+      },
+      "start": {
+        "col": 8,
+        "line": 24,
+      },
+    },
+    "severity": "info",
+  },
+]
+`;
+
+exports[`check fixtures/e40-exposure-facts.meant 1`] = `
+[
+  {
+    "code": "L-no-writer",
+    "file": "fixtures/e40-exposure-facts.meant",
+    "fix": "declare the action that moves it, or drop the field",
+    "law": "L-no-writer",
+    "message": "No action writes \`Subscription.next_ship_date\`.",
+    "range": {
+      "end": {
+        "col": 23,
+        "line": 9,
+      },
+      "start": {
+        "col": 9,
+        "line": 9,
+      },
+    },
+    "severity": "info",
+  },
+  {
+    "code": "L-no-writer",
+    "file": "fixtures/e40-exposure-facts.meant",
+    "fix": "declare the action that moves it, or drop the field",
+    "law": "L-no-writer",
+    "message": "No action writes \`Item.subscription\`.",
+    "range": {
+      "end": {
+        "col": 21,
+        "line": 12,
+      },
+      "start": {
+        "col": 9,
+        "line": 12,
+      },
+    },
+    "severity": "info",
+  },
+  {
+    "code": "L-no-writer",
+    "file": "fixtures/e40-exposure-facts.meant",
+    "fix": "declare the action that moves it, or drop the field",
+    "law": "L-no-writer",
+    "message": "No action writes \`Item.product_name\`.",
+    "range": {
+      "end": {
+        "col": 21,
+        "line": 13,
+      },
+      "start": {
+        "col": 9,
+        "line": 13,
+      },
+    },
+    "severity": "info",
+  },
+  {
+    "code": "exposure-fact",
+    "file": "fixtures/e40-exposure-facts.meant",
+    "law": "P",
+    "message": "\`"the deny reason"\` is not a fact (path or ConceptRef).",
+    "range": {
+      "end": {
+        "col": 31,
+        "line": 21,
+      },
+      "start": {
+        "col": 14,
+        "line": 21,
+      },
+    },
+    "severity": "error",
+  },
+  {
+    "code": "unresolved-fact",
+    "file": "fixtures/e40-exposure-facts.meant",
+    "fix": "declare it on \`concept Subscription\`, or fix the fact",
+    "law": "V11",
+    "message": "\`ship_date_typo\` is not a field or dimension of Subscription (V11).",
+    "range": {
+      "end": {
+        "col": 28,
+        "line": 22,
+      },
+      "start": {
+        "col": 14,
+        "line": 22,
+      },
+    },
+    "severity": "error",
+  },
+  {
+    "code": "unresolved-ref",
+    "file": "fixtures/e40-exposure-facts.meant",
+    "fix": "add the lane to \`touchpoints\`",
+    "law": "V2",
+    "message": ""Desk" is not a declared touchpoint lane.",
+    "range": {
+      "end": {
+        "col": 21,
+        "line": 23,
+      },
+      "start": {
+        "col": 15,
+        "line": 23,
+      },
+    },
+    "severity": "error",
+  },
+]
+`;
+
+exports[`check fixtures/e48-universal-actor-condition.meant 1`] = `
+[
+  {
+    "code": "L-no-writer",
+    "file": "fixtures/e48-universal-actor-condition.meant",
+    "fix": "declare the action that moves it, or drop the field",
+    "law": "L-no-writer",
+    "message": "No action writes \`Subscription.customer\`.",
+    "range": {
+      "end": {
+        "col": 17,
+        "line": 11,
+      },
+      "start": {
+        "col": 9,
+        "line": 11,
+      },
+    },
+    "severity": "info",
+  },
+  {
+    "code": "L-unref-action",
+    "file": "fixtures/e48-universal-actor-condition.meant",
+    "fix": "exercise it in a scenario, or delete it",
+    "law": "L-unref-action",
+    "message": "\`Cancel\` is declared but never referenced by a scenario, fuse, or sentence.",
+    "range": {
+      "end": {
+        "col": 14,
+        "line": 16,
+      },
+      "start": {
+        "col": 8,
+        "line": 16,
+      },
+    },
+    "severity": "info",
+  },
+  {
+    "code": "actor-condition-universal",
+    "file": "fixtures/e48-universal-actor-condition.meant",
+    "fix": "move the line into an actor block",
+    "law": "V14",
+    "message": "A condition mentioning \`actor.\` lives in a \`by <actor>:\` block — a universal line silently binds every future actor (E48).",
+    "range": {
+      "end": {
+        "col": 17,
+        "line": 19,
+      },
+      "start": {
+        "col": 12,
+        "line": 19,
+      },
+    },
+    "severity": "error",
+  },
+  {
+    "code": "block-actor-not-admitted",
+    "file": "fixtures/e48-universal-actor-condition.meant",
+    "fix": "add \`partner\` to \`by\`, or drop the block",
+    "law": "V14",
+    "message": "\`partner\` heads an actor block but is not in this action's admission list (E48).",
+    "range": {
+      "end": {
+        "col": 13,
+        "line": 20,
+      },
+      "start": {
+        "col": 6,
+        "line": 20,
+      },
+    },
+    "severity": "error",
+  },
+  {
+    "code": "unknown-actor-value",
+    "file": "fixtures/e48-universal-actor-condition.meant",
+    "fix": "add the role to the actor dimension, or use a declared one",
+    "law": "V3",
+    "message": "\`partner\` is not a value of \`dimension actor\` (customer | admin).",
+    "range": {
+      "end": {
+        "col": 13,
+        "line": 20,
+      },
+      "start": {
+        "col": 6,
+        "line": 20,
+      },
+    },
+    "severity": "error",
+  },
+]
+`;
+
+exports[`check fixtures/e49-creation-is-a-delta.meant 1`] = `
+[
+  {
+    "code": "L-unref-action",
+    "file": "fixtures/e49-creation-is-a-delta.meant",
+    "fix": "exercise it in a scenario, or delete it",
+    "law": "L-unref-action",
+    "message": "\`BillNow\` is declared but never referenced by a scenario, fuse, or sentence.",
+    "range": {
+      "end": {
+        "col": 15,
+        "line": 15,
+      },
+      "start": {
+        "col": 8,
+        "line": 15,
+      },
+    },
+    "severity": "info",
+  },
+  {
+    "code": "unknown-dimension-value",
+    "file": "fixtures/e49-creation-is-a-delta.meant",
+    "fix": "add it to the dimension, or use a declared value",
+    "law": "V3",
+    "message": "\`teleport\` is not a value of \`fulfillment\` (ship | none).",
+    "range": {
+      "end": {
+        "col": 44,
+        "line": 19,
+      },
+      "start": {
+        "col": 36,
+        "line": 19,
+      },
+    },
+    "severity": "error",
+  },
+  {
+    "code": "unresolved-path",
+    "file": "fixtures/e49-creation-is-a-delta.meant",
+    "fix": "declare it on \`concept Billing\`",
+    "law": "V4",
+    "message": "\`cadence\` is not a field or dimension of Billing.",
+    "range": {
+      "end": {
+        "col": 29,
+        "line": 20,
+      },
+      "start": {
+        "col": 22,
+        "line": 20,
+      },
+    },
+    "severity": "error",
+  },
+  {
+    "code": "unresolved-ref",
+    "file": "fixtures/e49-creation-is-a-delta.meant",
+    "fix": "declare \`concept Invoice\` or fix the reference",
+    "law": "V2",
+    "message": "\`Invoice\` is not a declared concept.",
+    "range": {
+      "end": {
+        "col": 16,
+        "line": 21,
+      },
+      "start": {
+        "col": 9,
+        "line": 21,
+      },
+    },
+    "severity": "error",
+  },
+]
+`;
+
+exports[`check fixtures/e52-values-are-line-entries.meant 1`] = `
+[
+  {
+    "code": "values-pipe",
+    "file": "fixtures/e52-values-are-line-entries.meant",
+    "fix": "split the list into line entries",
+    "law": "P",
+    "message": "\`values\` entries are one per line; \`|\` is dimension syntax only (E52).",
+    "range": {
+      "end": {
+        "col": 41,
+        "line": 7,
+      },
+      "start": {
+        "col": 5,
+        "line": 7,
+      },
+    },
+    "severity": "error",
+  },
+  {
+    "code": "L-unref-action",
+    "file": "fixtures/e52-values-are-line-entries.meant",
+    "fix": "exercise it in a scenario, or delete it",
+    "law": "L-unref-action",
+    "message": "\`Cancel\` is declared but never referenced by a scenario, fuse, or sentence.",
+    "range": {
+      "end": {
+        "col": 14,
+        "line": 15,
+      },
+      "start": {
+        "col": 8,
+        "line": 15,
+      },
+    },
+    "severity": "info",
+  },
+]
+`;
+
+exports[`check fixtures/e53-md-fence-tag.md 1`] = `
+[
+  {
+    "code": "L-no-writer",
+    "file": "fixtures/e53-md-fence-tag.md",
+    "fix": "declare the action that moves it, or drop the field",
+    "law": "L-no-writer",
+    "message": "No action writes \`Widget.label\`.",
+    "range": {
+      "end": {
+        "col": 14,
+        "line": 13,
+      },
+      "start": {
+        "col": 9,
+        "line": 13,
+      },
+    },
+    "severity": "info",
+  },
+  {
+    "code": "L-unref-shape",
+    "file": "fixtures/e53-md-fence-tag.md",
+    "fix": "gate an action on it, branch on it, or delete it",
+    "law": "L-unref-shape",
+    "message": "\`Ghost\` is declared but never referenced.",
+    "range": {
+      "end": {
+        "col": 12,
+        "line": 15,
+      },
+      "start": {
+        "col": 7,
+        "line": 15,
+      },
+    },
+    "severity": "info",
+  },
+  {
+    "code": "unresolved-ref",
+    "file": "fixtures/e53-md-fence-tag.md",
+    "fix": "declare \`concept Phantom\` or fix the reference",
+    "law": "V2",
+    "message": "\`Phantom\` is not a declared concept.",
+    "range": {
+      "end": {
+        "col": 23,
+        "line": 15,
+      },
+      "start": {
+        "col": 16,
+        "line": 15,
+      },
+    },
+    "severity": "error",
+  },
+]
+`;
+
+exports[`check fixtures/e54-domain-conflicts 1`] = `
+[
+  {
+    "code": "L-no-writer",
+    "file": "fixtures/e54-domain-conflicts/a.meant",
+    "fix": "declare the action that moves it, or drop the field",
+    "law": "L-no-writer",
+    "message": "No action writes \`Customer.name\`.",
+    "range": {
+      "end": {
+        "col": 13,
+        "line": 9,
+      },
+      "start": {
+        "col": 9,
+        "line": 9,
+      },
+    },
+    "severity": "info",
+  },
+  {
+    "code": "domain-clause-conflict",
+    "file": "fixtures/e54-domain-conflicts/b.meant",
+    "fix": "make the values agree, or keep the clause in one file",
+    "law": "P",
+    "message": "\`mode code-first\` conflicts with \`mode model-first\` at fixtures/e54-domain-conflicts/a.meant:4 — a domain's clauses carry one value across all its files (§1).",
+    "range": {
+      "end": {
+        "col": 18,
+        "line": 2,
+      },
+      "start": {
+        "col": 3,
+        "line": 2,
+      },
+    },
+    "severity": "error",
+  },
+  {
+    "code": "duplicate-declaration",
+    "file": "fixtures/e54-domain-conflicts/b.meant",
+    "fix": "rename the second declaration, or delete it",
+    "law": "V1",
+    "message": "\`Customer\` is already declared in this domain, at fixtures/e54-domain-conflicts/a.meant:7 (V1: names and IDs are unique).",
+    "range": {
+      "end": {
+        "col": 17,
+        "line": 5,
+      },
+      "start": {
+        "col": 9,
+        "line": 5,
+      },
+    },
+    "severity": "error",
+  },
+  {
+    "code": "L-unref-shape",
+    "file": "fixtures/e54-domain-conflicts/typo.meant",
+    "fix": "gate an action on it, branch on it, or delete it",
+    "law": "L-unref-shape",
+    "message": "\`Lapsed\` is declared but never referenced.",
+    "range": {
+      "end": {
+        "col": 13,
+        "line": 5,
+      },
+      "start": {
+        "col": 7,
+        "line": 5,
+      },
+    },
+    "severity": "info",
+  },
+  {
+    "code": "unresolved-ref",
+    "file": "fixtures/e54-domain-conflicts/typo.meant",
+    "fix": "did you mean \`domain e54-conflicts\`? domains in this run: e54-conflicts, e54-conflictz",
+    "law": "V2",
+    "message": "\`Customer\` is not a declared concept. It is declared in domain \`e54-conflicts\` (fixtures/e54-domain-conflicts/a.meant:7), domain \`e54-conflicts\` (fixtures/e54-domain-conflicts/b.meant:5).",
+    "range": {
+      "end": {
+        "col": 25,
+        "line": 5,
+      },
+      "start": {
+        "col": 17,
+        "line": 5,
+      },
+    },
+    "severity": "error",
+  },
+]
+`;
+
+exports[`check fixtures/e54-domain-split 1`] = `
+[
+  {
+    "code": "L-unref-shape",
+    "file": "fixtures/e54-domain-split/behavior.meant",
+    "fix": "gate an action on it, branch on it, or delete it",
+    "law": "L-unref-shape",
+    "message": "\`Done\` is declared but never referenced.",
+    "range": {
+      "end": {
+        "col": 11,
+        "line": 6,
+      },
+      "start": {
+        "col": 7,
+        "line": 6,
+      },
+    },
+    "severity": "info",
+  },
+]
+`;
+
+exports[`check fixtures/known-bad.meant 1`] = `
+[
+  {
+    "code": "deny-code-without-copy",
+    "file": "fixtures/known-bad.meant",
+    "fix": "add the message: \`CODE "…"\`",
+    "law": "V6",
+    "message": "\`SILENT_CODE\` carries no copy — a code cannot exist without its message (E27).",
+    "range": {
+      "end": {
+        "col": 16,
+        "line": 12,
+      },
+      "start": {
+        "col": 5,
+        "line": 12,
+      },
+    },
+    "severity": "error",
+  },
+  {
+    "code": "L-id-string",
+    "file": "fixtures/known-bad.meant",
+    "fix": "declare the concept-typed relation and compare identities with \`.id\`",
+    "law": "L-id-string",
+    "message": "\`member_id\` is an id-shaped string — a relation in costume (E35).",
+    "range": {
+      "end": {
+        "col": 18,
+        "line": 17,
+      },
+      "start": {
+        "col": 9,
+        "line": 17,
+      },
+    },
+    "severity": "info",
+  },
+  {
+    "code": "L-no-writer",
+    "file": "fixtures/known-bad.meant",
+    "fix": "declare the action that moves it, or drop the field",
+    "law": "L-no-writer",
+    "message": "No action writes \`Member.member_id\`.",
+    "range": {
+      "end": {
+        "col": 18,
+        "line": 17,
+      },
+      "start": {
+        "col": 9,
+        "line": 17,
+      },
+    },
+    "severity": "info",
+  },
+  {
+    "code": "L-no-writer",
+    "file": "fixtures/known-bad.meant",
+    "fix": "declare the action that moves it, or drop the field",
+    "law": "L-no-writer",
+    "message": "No action writes \`Loan.member\`.",
+    "range": {
+      "end": {
+        "col": 15,
+        "line": 22,
+      },
+      "start": {
+        "col": 9,
+        "line": 22,
+      },
+    },
+    "severity": "info",
+  },
+  {
+    "code": "L-no-writer",
+    "file": "fixtures/known-bad.meant",
+    "fix": "declare the action that moves it, or drop the field",
+    "law": "L-no-writer",
+    "message": "No action writes \`Loan.due_date\`.",
+    "range": {
+      "end": {
+        "col": 17,
+        "line": 23,
+      },
+      "start": {
+        "col": 9,
+        "line": 23,
+      },
+    },
+    "severity": "info",
+  },
+  {
+    "code": "L-bool",
+    "file": "fixtures/known-bad.meant",
+    "fix": "consider \`dimension is_late = … | …\`",
+    "law": "L-bool",
+    "message": "\`is_late\` is a bool — when its two states carry domain meaning it is a disguised two-value dimension (E30).",
+    "range": {
+      "end": {
+        "col": 16,
+        "line": 24,
+      },
+      "start": {
+        "col": 9,
+        "line": 24,
+      },
+    },
+    "severity": "info",
+  },
+  {
+    "code": "L-no-writer",
+    "file": "fixtures/known-bad.meant",
+    "fix": "declare the action that moves it, or drop the field",
+    "law": "L-no-writer",
+    "message": "No action writes \`Loan.is_late\`.",
+    "range": {
+      "end": {
+        "col": 16,
+        "line": 24,
+      },
+      "start": {
+        "col": 9,
+        "line": 24,
+      },
+    },
+    "severity": "info",
+  },
+  {
+    "code": "duplicate-declaration",
+    "file": "fixtures/known-bad.meant",
+    "fix": "rename the second declaration, or delete it",
+    "law": "V1",
+    "message": "\`Loan\` is already declared in this domain, at fixtures/known-bad.meant:19 (V1: names and IDs are unique).",
+    "range": {
+      "end": {
+        "col": 13,
+        "line": 26,
+      },
+      "start": {
+        "col": 9,
+        "line": 26,
+      },
+    },
+    "severity": "error",
+  },
+  {
+    "code": "unknown-dimension-value",
+    "file": "fixtures/known-bad.meant",
+    "fix": "add it to the dimension, or use a declared value",
+    "law": "V3",
+    "message": "\`pending\` is not a value of \`status\` (open | returned).",
+    "range": {
+      "end": {
+        "col": 25,
+        "line": 39,
+      },
+      "start": {
+        "col": 18,
+        "line": 39,
+      },
+    },
+    "severity": "error",
+  },
+  {
+    "code": "unresolved-fuse-trigger",
+    "file": "fixtures/known-bad.meant",
+    "fix": "declare \`action LostBook\`, or drop it from the list",
+    "law": "V5",
+    "message": "\`LostBook\` is in the wait list but is not a declared action (V5).",
+    "range": {
+      "end": {
+        "col": 17,
+        "line": 40,
+      },
+      "start": {
+        "col": 9,
+        "line": 40,
+      },
+    },
+    "severity": "error",
+  },
+  {
+    "code": "L-unref-shape",
+    "file": "fixtures/known-bad.meant",
+    "fix": "gate an action on it, branch on it, or delete it",
+    "law": "L-unref-shape",
+    "message": "\`Confused\` is declared but never referenced.",
+    "range": {
+      "end": {
+        "col": 15,
+        "line": 42,
+      },
+      "start": {
+        "col": 7,
+        "line": 42,
+      },
+    },
+    "severity": "info",
+  },
+  {
+    "code": "unresolved-path",
+    "file": "fixtures/known-bad.meant",
+    "fix": "declare it, or fix the path",
+    "law": "V4",
+    "message": "\`open_loans\` resolves to no field, dimension, or value.",
+    "range": {
+      "end": {
+        "col": 30,
+        "line": 43,
+      },
+      "start": {
+        "col": 20,
+        "line": 43,
+      },
+    },
+    "severity": "error",
+  },
+  {
+    "code": "L-unref-action",
+    "file": "fixtures/known-bad.meant",
+    "fix": "exercise it in a scenario, or delete it",
+    "law": "L-unref-action",
+    "message": "\`BorrowBook\` is declared but never referenced by a scenario, fuse, or sentence.",
+    "range": {
+      "end": {
+        "col": 18,
+        "line": 45,
+      },
+      "start": {
+        "col": 8,
+        "line": 45,
+      },
+    },
+    "severity": "info",
+  },
+  {
+    "code": "actor-condition-universal",
+    "file": "fixtures/known-bad.meant",
+    "fix": "move the line into an actor block",
+    "law": "V14",
+    "message": "A condition mentioning \`actor.\` lives in a \`by <actor>:\` block — a universal line silently binds every future actor (E48).",
+    "range": {
+      "end": {
+        "col": 17,
+        "line": 48,
+      },
+      "start": {
+        "col": 12,
+        "line": 48,
+      },
+    },
+    "severity": "error",
+  },
+  {
+    "code": "unresolved-path",
+    "file": "fixtures/known-bad.meant",
+    "fix": "declare it on \`concept Member\`",
+    "law": "V4",
+    "message": "\`member\` is not a field or dimension of Member.",
+    "range": {
+      "end": {
+        "col": 29,
+        "line": 48,
+      },
+      "start": {
+        "col": 23,
+        "line": 48,
+      },
+    },
+    "severity": "error",
+  },
+  {
+    "code": "unresolved-ref",
+    "file": "fixtures/known-bad.meant",
+    "fix": "add it under \`concept DenyCode\`'s \`values\`",
+    "law": "V2",
+    "message": "\`OVER_LIMIT\` is not a declared DenyCode value.",
+    "range": {
+      "end": {
+        "col": 43,
+        "line": 49,
+      },
+      "start": {
+        "col": 33,
+        "line": 49,
+      },
+    },
+    "severity": "error",
+  },
+  {
+    "code": "block-actor-not-admitted",
+    "file": "fixtures/known-bad.meant",
+    "fix": "add \`librarian\` to \`by\`, or drop the block",
+    "law": "V14",
+    "message": "\`librarian\` heads an actor block but is not in this action's admission list (E48).",
+    "range": {
+      "end": {
+        "col": 15,
+        "line": 50,
+      },
+      "start": {
+        "col": 6,
+        "line": 50,
+      },
+    },
+    "severity": "error",
+  },
+  {
+    "code": "subject-mismatch",
+    "file": "fixtures/known-bad.meant",
+    "fix": "use a Member shape, or change the action's \`of\`",
+    "law": "V9",
+    "message": "\`OpenLoan\` is a shape of Loan, but this action's subject is Member (E36).",
+    "range": {
+      "end": {
+        "col": 22,
+        "line": 51,
+      },
+      "start": {
+        "col": 14,
+        "line": 51,
+      },
+    },
+    "severity": "error",
+  },
+  {
+    "code": "unresolved-sentence-ref",
+    "file": "fixtures/known-bad.meant",
+    "fix": "declare it, or lowercase it to mark it honestly unverified prose",
+    "law": "V8",
+    "message": "\`Reminder\` is used as vocabulary but resolves to no declaration (V8).",
+    "range": {
+      "end": {
+        "col": 17,
+        "line": 59,
+      },
+      "start": {
+        "col": 9,
+        "line": 59,
+      },
+    },
+    "severity": "error",
+  },
+  {
+    "code": "marker-without-handle",
+    "file": "fixtures/known-bad.meant",
+    "fix": "add the owner handle",
+    "law": "V13",
+    "message": "An \`undecided\` marker names its owner — \`undecided @handle "…"\` (E18/E19).",
+    "range": {
+      "end": {
+        "col": 37,
+        "line": 60,
+      },
+      "start": {
+        "col": 3,
+        "line": 60,
+      },
+    },
+    "severity": "error",
+  },
+  {
+    "code": "judged-without-rubric",
+    "file": "fixtures/known-bad.meant",
+    "fix": "add a \`rubric "…"\` line stating what fails",
+    "law": "V7",
+    "message": "\`NoteNeverScolds\` is checked by judgment but declares no \`rubric\`.",
+    "range": {
+      "end": {
+        "col": 18,
+        "line": 64,
+      },
+      "start": {
+        "col": 12,
+        "line": 64,
+      },
+    },
+    "severity": "error",
+  },
+  {
+    "code": "unresolved-fact",
+    "file": "fixtures/known-bad.meant",
+    "fix": "declare it on \`concept Loan\`, or fix the fact",
+    "law": "V11",
+    "message": "\`return_address\` is not a field or dimension of Loan (V11).",
+    "range": {
+      "end": {
+        "col": 38,
+        "line": 68,
+      },
+      "start": {
+        "col": 24,
+        "line": 68,
+      },
+    },
+    "severity": "error",
+  },
+  {
+    "code": "unresolved-ref",
+    "file": "fixtures/known-bad.meant",
+    "fix": "declare \`action ReturnBook\` or fix the reference",
+    "law": "V2",
+    "message": "\`ReturnBook\` is not a declared action.",
+    "range": {
+      "end": {
+        "col": 34,
+        "line": 72,
+      },
+      "start": {
+        "col": 24,
+        "line": 72,
+      },
+    },
+    "severity": "error",
+  },
+  {
+    "code": "planned-with-verified-by",
+    "file": "fixtures/known-bad.meant",
+    "fix": "remove the marker to ship it, or drop the anchor",
+    "law": "V10",
+    "message": "\`GhostFlow\` is \`(planned)\` — planned content compiles into the red set and carries no \`verified-by\` (§6).",
+    "range": {
+      "end": {
+        "col": 42,
+        "line": 73,
+      },
+      "start": {
+        "col": 15,
+        "line": 73,
+      },
+    },
+    "severity": "error",
+  },
+]
+`;
+
+exports[`check fixtures/known-good.meant 1`] = `
+[
+  {
+    "code": "L-no-writer",
+    "file": "fixtures/known-good.meant",
+    "fix": "declare the action that moves it, or drop the field",
+    "law": "L-no-writer",
+    "message": "No action writes \`Book.title\`.",
+    "range": {
+      "end": {
+        "col": 14,
+        "line": 21,
+      },
+      "start": {
+        "col": 9,
+        "line": 21,
+      },
+    },
+    "severity": "info",
+  },
+  {
+    "code": "L-no-writer",
+    "file": "fixtures/known-good.meant",
+    "fix": "declare the action that moves it, or drop the field",
+    "law": "L-no-writer",
+    "message": "No action writes \`Loan.book\`.",
+    "range": {
+      "end": {
+        "col": 13,
+        "line": 27,
+      },
+      "start": {
+        "col": 9,
+        "line": 27,
+      },
+    },
+    "severity": "info",
+  },
+  {
+    "code": "detector-required",
+    "file": "fixtures/known-good.meant",
+    "fix": "add \`defineDetector({ concept: "StaffNotes" })\` in the mapping",
+    "law": "V11",
+    "message": "\`StaffNotes\` has no relation to Loan — the mapping must bind its detector (E40, §10).",
+    "range": {
+      "end": {
+        "col": 28,
+        "line": 106,
+      },
+      "start": {
+        "col": 18,
+        "line": 106,
+      },
+    },
+    "severity": "info",
+  },
+]
+`;
+
+exports[`check fixtures/parse-inline-branch.meant 1`] = `
+[
+  {
+    "code": "L-unref-action",
+    "file": "fixtures/parse-inline-branch.meant",
+    "fix": "exercise it in a scenario, or delete it",
+    "law": "L-unref-action",
+    "message": "\`Cancel\` is declared but never referenced by a scenario, fuse, or sentence.",
+    "range": {
+      "end": {
+        "col": 14,
+        "line": 11,
+      },
+      "start": {
+        "col": 8,
+        "line": 11,
+      },
+    },
+    "severity": "info",
+  },
+  {
+    "code": "branch-empty",
+    "file": "fixtures/parse-inline-branch.meant",
+    "law": "P",
+    "message": "A branch needs an \`effect\` block.",
+    "range": {
+      "end": {
+        "col": 33,
+        "line": 12,
+      },
+      "start": {
+        "col": 3,
+        "line": 12,
+      },
+    },
+    "severity": "error",
+  },
+  {
+    "code": "branch-inline",
+    "file": "fixtures/parse-inline-branch.meant",
+    "fix": "indent the effect block under the branch head",
+    "law": "P",
+    "message": "Branch bodies are block-only — there is no inline branch form (§17).",
+    "range": {
+      "end": {
+        "col": 33,
+        "line": 12,
+      },
+      "start": {
+        "col": 15,
+        "line": 12,
+      },
+    },
+    "severity": "error",
+  },
+]
+`;
+
+exports[`check fixtures/parse-tab-indent.meant 1`] = `
+[
+  {
+    "code": "tab-indent",
+    "file": "fixtures/parse-tab-indent.meant",
+    "fix": "replace the tab with spaces",
+    "law": "P",
+    "message": "Tabs are illegal (§17): indentation is 2 spaces per level.",
+    "range": {
+      "end": {
+        "col": 2,
+        "line": 6,
+      },
+      "start": {
+        "col": 1,
+        "line": 6,
+      },
+    },
+    "severity": "error",
+  },
+  {
+    "code": "L-no-writer",
+    "file": "fixtures/parse-tab-indent.meant",
+    "fix": "declare the action that moves it, or drop the field",
+    "law": "L-no-writer",
+    "message": "No action writes \`Thing.label\`.",
+    "range": {
+      "end": {
+        "col": 13,
+        "line": 6,
+      },
+      "start": {
+        "col": 8,
+        "line": 6,
+      },
+    },
+    "severity": "info",
+  },
+  {
+    "code": "L-no-writer",
+    "file": "fixtures/parse-tab-indent.meant",
+    "fix": "declare the action that moves it, or drop the field",
+    "law": "L-no-writer",
+    "message": "No action writes \`Other.label\`.",
+    "range": {
+      "end": {
+        "col": 14,
+        "line": 9,
+      },
+      "start": {
+        "col": 9,
+        "line": 9,
+      },
+    },
+    "severity": "info",
+  },
+]
+`;
+
+exports[`check fixtures/parse-unknown-statement.meant 1`] = `
+[
+  {
+    "code": "unknown-statement",
+    "file": "fixtures/parse-unknown-statement.meant",
+    "fix": "start the line with concept, dimension, touchpoints, shape, exposure, action, invariant, or scenario",
+    "law": "P",
+    "message": "\`policy\` does not open a kernel statement (§4: the kernel eight).",
+    "range": {
+      "end": {
+        "col": 20,
+        "line": 8,
+      },
+      "start": {
+        "col": 1,
+        "line": 8,
+      },
+    },
+    "severity": "error",
+  },
+  {
+    "code": "L-unref-action",
+    "file": "fixtures/parse-unknown-statement.meant",
+    "fix": "exercise it in a scenario, or delete it",
+    "law": "L-unref-action",
+    "message": "\`Cancel\` is declared but never referenced by a scenario, fuse, or sentence.",
+    "range": {
+      "end": {
+        "col": 14,
+        "line": 14,
+      },
+      "start": {
+        "col": 8,
+        "line": 14,
+      },
+    },
+    "severity": "info",
+  },
+]
+`;
+
+exports[`check fixtures/parse-unterminated-string.meant 1`] = `
+[
+  {
+    "code": "L-unref-action",
+    "file": "fixtures/parse-unterminated-string.meant",
+    "fix": "exercise it in a scenario, or delete it",
+    "law": "L-unref-action",
+    "message": "\`Cancel\` is declared but never referenced by a scenario, fuse, or sentence.",
+    "range": {
+      "end": {
+        "col": 14,
+        "line": 11,
+      },
+      "start": {
+        "col": 8,
+        "line": 11,
+      },
+    },
+    "severity": "info",
+  },
+  {
+    "code": "unterminated-string",
+    "file": "fixtures/parse-unterminated-string.meant",
+    "fix": "close the string with \`"\`",
+    "law": "P",
+    "message": "String is never closed (§17: strings are double-quoted).",
+    "range": {
+      "end": {
+        "col": 1,
+        "line": 15,
+      },
+      "start": {
+        "col": 8,
+        "line": 14,
+      },
+    },
+    "severity": "error",
+  },
+]
+`;
+
+exports[`check fixtures/sim-admission.meant 1`] = `
+[
+  {
+    "code": "L-dim-single-consumer",
+    "file": "fixtures/sim-admission.meant",
+    "fix": "consume it, or delete it",
+    "law": "L-dim-single-consumer",
+    "message": "\`dimension actor\` has 1 consumer — dead-or-nestable vocabulary (§4.2).",
+    "range": {
+      "end": {
+        "col": 16,
+        "line": 7,
+      },
+      "start": {
+        "col": 11,
+        "line": 7,
+      },
+    },
+    "severity": "info",
+  },
+]
+`;
+
+exports[`check fixtures/sim-dead-region.meant 1`] = `
+[
+  {
+    "code": "L-unref-action",
+    "file": "fixtures/sim-dead-region.meant",
+    "fix": "exercise it in a scenario, or delete it",
+    "law": "L-unref-action",
+    "message": "\`Repay\` is declared but never referenced by a scenario, fuse, or sentence.",
+    "range": {
+      "end": {
+        "col": 13,
+        "line": 19,
+      },
+      "start": {
+        "col": 8,
+        "line": 19,
+      },
+    },
+    "severity": "info",
+  },
+]
+`;
+
+exports[`check fixtures/sim-s001-tick.meant 1`] = `
+[
+  {
+    "code": "L-no-writer",
+    "file": "fixtures/sim-s001-tick.meant",
+    "fix": "declare the action that moves it, or drop the field",
+    "law": "L-no-writer",
+    "message": "No action writes \`Membership.session_count\`.",
+    "range": {
+      "end": {
+        "col": 22,
+        "line": 13,
+      },
+      "start": {
+        "col": 9,
+        "line": 13,
+      },
+    },
+    "severity": "info",
+  },
+  {
+    "code": "L-no-writer",
+    "file": "fixtures/sim-s001-tick.meant",
+    "fix": "declare the action that moves it, or drop the field",
+    "law": "L-no-writer",
+    "message": "No action writes \`HeldFreeze.membership\`.",
+    "range": {
+      "end": {
+        "col": 19,
+        "line": 19,
+      },
+      "start": {
+        "col": 9,
+        "line": 19,
+      },
+    },
+    "severity": "info",
+  },
+  {
+    "code": "L-unref-action",
+    "file": "fixtures/sim-s001-tick.meant",
+    "fix": "exercise it in a scenario, or delete it",
+    "law": "L-unref-action",
+    "message": "\`SessionTick\` is declared but never referenced by a scenario, fuse, or sentence.",
+    "range": {
+      "end": {
+        "col": 19,
+        "line": 37,
+      },
+      "start": {
+        "col": 8,
+        "line": 37,
+      },
+    },
+    "severity": "info",
+  },
+]
+`;
+
+exports[`check fixtures/v15-actorless.meant 1`] = `
+[
+  {
+    "code": "L-unref-action",
+    "file": "fixtures/v15-actorless.meant",
+    "fix": "exercise it in a scenario, or delete it",
+    "law": "L-unref-action",
+    "message": "\`Cancel\` is declared but never referenced by a scenario, fuse, or sentence.",
+    "range": {
+      "end": {
+        "col": 14,
+        "line": 11,
+      },
+      "start": {
+        "col": 8,
+        "line": 11,
+      },
+    },
+    "severity": "info",
+  },
+  {
+    "code": "missing-actor-dimension",
+    "file": "fixtures/v15-actorless.meant",
+    "fix": "declare \`dimension actor = …\`, or drop the hook (a system-only domain is legal)",
+    "law": "V15",
+    "message": "\`by\` / \`to\` / \`actor.\` bind to the well-known \`dimension actor\`, which this domain never declares (E34).",
+    "range": {
+      "end": {
+        "col": 14,
+        "line": 12,
+      },
+      "start": {
+        "col": 6,
+        "line": 12,
+      },
+    },
+    "severity": "error",
+  },
+]
+`;

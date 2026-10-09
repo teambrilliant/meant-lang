@@ -1,0 +1,31 @@
+domain discovery-noise-cap
+  "Discovery fixture: a counter incremented only under a cap shape's otherwise-branches is
+   bounded — near-derivable, blocked on first-match branch exclusion."
+  mode model-first
+
+concept Ticket
+  "A support ticket that draws at most two reminders."
+  dimension status = open | closed
+  field reminders_sent: int
+
+shape OpenTicket of Ticket
+  where status = open
+
+shape CapReached of Ticket
+  where reminders_sent >= 2
+
+action NudgeAssignee
+  in CapReached :
+    effect
+      the nudge is suppressed
+  otherwise :
+    effect
+      reminders_sent += 1
+
+action EscalateTicket
+  in CapReached :
+    effect
+      the escalation goes out without a further reminder
+  otherwise :
+    effect
+      reminders_sent += 1

@@ -1,0 +1,15 @@
+domain e30
+  "A bool whose two states carry domain meaning is a disguised two-value dimension (E30)."
+  mode model-first
+
+concept Subscription
+  dimension status = active | cancelled
+  field payment_issue: bool  # EXPECT: L-bool
+
+shape Active of Subscription
+  where status = active
+
+action Cancel of Subscription
+  requires Active
+  effect
+    status = cancelled

@@ -1,0 +1,17 @@
+domain e35
+  "An id-shaped string field is a relation in costume (E35)."
+  mode model-first
+
+concept Customer
+
+concept Subscription
+  dimension status = active | cancelled
+  field customer_id: string  # EXPECT: L-id-string
+
+shape Active of Subscription
+  where status = active
+
+action Cancel of Subscription
+  requires Active
+  effect
+    status = cancelled

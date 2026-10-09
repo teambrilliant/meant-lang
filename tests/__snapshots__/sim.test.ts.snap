@@ -1,0 +1,620 @@
+// Bun Snapshot v1, https://bun.sh/docs/test/snapshots
+
+exports[`sim fixtures/discovery-held-change.meant 1`] = `
+[
+  {
+    "counterexample": [
+      "Membership#1 (subject): status = active",
+      "today = 2026-03-15",
+    ],
+    "file": "fixtures/discovery-held-change.meant",
+    "kind": "witness",
+    "message": "satisfiable — one concrete world lights this region up.",
+    "range": {
+      "end": {
+        "col": 28,
+        "line": 20,
+      },
+      "start": {
+        "col": 1,
+        "line": 20,
+      },
+    },
+    "status": "verified",
+    "subject": "MidTerm",
+  },
+  {
+    "evidence": [
+      "this model carries 3 opaque effect sentence(s); an exit hiding in one of them would look exactly like this",
+    ],
+    "file": "fixtures/discovery-held-change.meant",
+    "kind": "machine",
+    "message": "edges land in \`PendingHold\` but none computably leaves it: the region is terminal, or its exit lives in an effect the kernel cannot execute.",
+    "range": {
+      "end": {
+        "col": 32,
+        "line": 24,
+      },
+      "start": {
+        "col": 1,
+        "line": 24,
+      },
+    },
+    "status": "unprobeable",
+    "subject": "PendingHold",
+  },
+  {
+    "counterexample": [
+      "Membership#1 (subject)",
+      "HeldChange#1: membership = Membership#1, status = pending",
+      "today = 2026-03-15",
+    ],
+    "file": "fixtures/discovery-held-change.meant",
+    "kind": "witness",
+    "message": "satisfiable — one concrete world lights this region up.",
+    "range": {
+      "end": {
+        "col": 32,
+        "line": 24,
+      },
+      "start": {
+        "col": 1,
+        "line": 24,
+      },
+    },
+    "status": "verified",
+    "subject": "PendingHold",
+  },
+  {
+    "evidence": [
+      "this branch also carries 1 opaque effect sentence(s): the landing derives, the rest does not",
+    ],
+    "file": "fixtures/discovery-held-change.meant",
+    "kind": "probe",
+    "message": "the deltas land in \`PendingHold\` — authored nowhere, and correctly so (§4.6).",
+    "range": {
+      "end": {
+        "col": 15,
+        "line": 29,
+      },
+      "start": {
+        "col": 3,
+        "line": 29,
+      },
+    },
+    "status": "derived",
+    "subject": "RequestPause@MidTerm -> PendingHold",
+  },
+  {
+    "file": "fixtures/discovery-held-change.meant",
+    "kind": "probe",
+    "message": "effect sentence carries meaning the kernel cannot execute: "the member is notified by email".",
+    "range": {
+      "end": {
+        "col": 38,
+        "line": 32,
+      },
+      "start": {
+        "col": 7,
+        "line": 32,
+      },
+    },
+    "status": "unprobeable",
+    "subject": "RequestPause@MidTerm",
+  },
+  {
+    "evidence": [
+      "this branch also carries 1 opaque effect sentence(s): the landing derives, the rest does not",
+    ],
+    "file": "fixtures/discovery-held-change.meant",
+    "kind": "probe",
+    "message": "the deltas land in \`PendingHold\` — authored nowhere, and correctly so (§4.6).",
+    "range": {
+      "end": {
+        "col": 15,
+        "line": 36,
+      },
+      "start": {
+        "col": 3,
+        "line": 36,
+      },
+    },
+    "status": "derived",
+    "subject": "RequestCancel@MidTerm -> PendingHold",
+  },
+  {
+    "file": "fixtures/discovery-held-change.meant",
+    "kind": "probe",
+    "message": "effect sentence carries meaning the kernel cannot execute: "the member is notified by email".",
+    "range": {
+      "end": {
+        "col": 38,
+        "line": 39,
+      },
+      "start": {
+        "col": 7,
+        "line": 39,
+      },
+    },
+    "status": "unprobeable",
+    "subject": "RequestCancel@MidTerm",
+  },
+  {
+    "file": "fixtures/discovery-held-change.meant",
+    "kind": "probe",
+    "message": "the deltas land in \`PendingHold\` — authored nowhere, and correctly so (§4.6).",
+    "range": {
+      "end": {
+        "col": 15,
+        "line": 43,
+      },
+      "start": {
+        "col": 3,
+        "line": 43,
+      },
+    },
+    "status": "derived",
+    "subject": "RequestSwitch@MidTerm -> PendingHold",
+  },
+  {
+    "file": "fixtures/discovery-held-change.meant",
+    "kind": "probe",
+    "message": "effect sentence carries meaning the kernel cannot execute: "the held state mirrors onto the live Membership; HeldChange.status becomes applied".",
+    "range": {
+      "end": {
+        "col": 87,
+        "line": 51,
+      },
+      "start": {
+        "col": 5,
+        "line": 51,
+      },
+    },
+    "status": "unprobeable",
+    "subject": "ApplyHeldChange@effect",
+  },
+]
+`;
+
+exports[`report fixtures/discovery-held-change.meant 1`] = `
+{
+  "candidates": [
+    {
+      "claim": "At most one HeldChange per Membership satisfies \`where status = pending\` at a time.",
+      "evidence": [
+        "creation site \`RequestPause@MidTerm\`: \`new HeldChange with status = pending, kind = pause\`",
+        "creation site \`RequestCancel@MidTerm\`: \`new HeldChange with status = pending, kind = cancel\`",
+        "creation site \`RequestSwitch@MidTerm\`: \`new HeldChange with status = pending, kind = switch\`",
+        "guarding conjunct on every one of them: \`no HeldChange where status = pending\`",
+      ],
+      "file": "fixtures/discovery-held-change.meant",
+      "id": "DRV-at-most-one-Membership-61249c1f",
+      "range": {
+        "end": {
+          "col": 57,
+          "line": 31,
+        },
+        "start": {
+          "col": 7,
+          "line": 31,
+        },
+      },
+      "status": "theorem",
+      "template": "at-most-one",
+    },
+    {
+      "blocked": "the sentence at ApplyHeldChange names this member or one of its values",
+      "claim": "\`HeldChange.status\` is written once, at creation, and never moved.",
+      "evidence": [
+        "assigned at 3 creation site(s): RequestPause@MidTerm, RequestCancel@MidTerm, RequestSwitch@MidTerm",
+        "no delta anywhere targets it",
+        "opaque sentence that may move it: "the held state mirrors onto the live Membership; HeldChange.status becomes applied" (ApplyHeldChange)",
+      ],
+      "file": "fixtures/discovery-held-change.meant",
+      "id": "DRV-write-once-HeldChange-a4978ded",
+      "range": {
+        "end": {
+          "col": 57,
+          "line": 31,
+        },
+        "start": {
+          "col": 7,
+          "line": 31,
+        },
+      },
+      "status": "near",
+      "template": "write-once",
+    },
+    {
+      "claim": "\`HeldChange.kind\` is written once, at creation, and never moved.",
+      "evidence": [
+        "assigned at 3 creation site(s): RequestPause@MidTerm, RequestCancel@MidTerm, RequestSwitch@MidTerm",
+        "no delta anywhere targets it",
+      ],
+      "file": "fixtures/discovery-held-change.meant",
+      "id": "DRV-write-once-HeldChange-9363bcf1",
+      "range": {
+        "end": {
+          "col": 57,
+          "line": 31,
+        },
+        "start": {
+          "col": 7,
+          "line": 31,
+        },
+      },
+      "status": "theorem",
+      "template": "write-once",
+    },
+    {
+      "claim": "\`Membership.status\` is read by 1 gate(s) and written by nothing.",
+      "evidence": [
+        "read by shape MidTerm",
+        "no delta and no creation assigns it: either the action that sets it is missing from the model, or the gate reads provisioning state the model does not own — the model does not say which",
+      ],
+      "file": "fixtures/discovery-held-change.meant",
+      "id": "DRV-suspicious-absence-Membership-93b74ab2",
+      "range": {
+        "end": {
+          "col": 49,
+          "line": 11,
+        },
+        "start": {
+          "col": 3,
+          "line": 11,
+        },
+      },
+      "status": "absence",
+      "template": "suspicious-absence",
+    },
+  ],
+  "opacity": [
+    {
+      "declaration": "shape PendingHold",
+      "detail": [],
+      "file": "fixtures/discovery-held-change.meant",
+      "range": {
+        "end": {
+          "col": 32,
+          "line": 24,
+        },
+        "start": {
+          "col": 1,
+          "line": 24,
+        },
+      },
+      "sentences": 0,
+      "skipped": 0,
+      "unprobeable": 1,
+    },
+    {
+      "declaration": "action RequestPause",
+      "detail": [
+        "effect sentence (fixtures/discovery-held-change.meant:32) — declared, unverified",
+      ],
+      "file": "fixtures/discovery-held-change.meant",
+      "range": {
+        "end": {
+          "col": 20,
+          "line": 27,
+        },
+        "start": {
+          "col": 1,
+          "line": 27,
+        },
+      },
+      "sentences": 1,
+      "skipped": 0,
+      "unprobeable": 1,
+    },
+    {
+      "declaration": "action RequestCancel",
+      "detail": [
+        "effect sentence (fixtures/discovery-held-change.meant:39) — declared, unverified",
+      ],
+      "file": "fixtures/discovery-held-change.meant",
+      "range": {
+        "end": {
+          "col": 21,
+          "line": 34,
+        },
+        "start": {
+          "col": 1,
+          "line": 34,
+        },
+      },
+      "sentences": 1,
+      "skipped": 0,
+      "unprobeable": 1,
+    },
+    {
+      "declaration": "action ApplyHeldChange",
+      "detail": [
+        "effect sentence (fixtures/discovery-held-change.meant:51) — declared, unverified",
+      ],
+      "file": "fixtures/discovery-held-change.meant",
+      "range": {
+        "end": {
+          "col": 37,
+          "line": 47,
+        },
+        "start": {
+          "col": 1,
+          "line": 47,
+        },
+      },
+      "sentences": 1,
+      "skipped": 0,
+      "unprobeable": 1,
+    },
+  ],
+  "patterns": [
+    {
+      "cluster": "identical-shape",
+      "count": 2,
+      "pattern": "the <VAL> is notified by email",
+      "sites": [
+        "RequestPause@MidTerm — fixtures/discovery-held-change.meant:32",
+        "RequestCancel@MidTerm — fixtures/discovery-held-change.meant:39",
+      ],
+    },
+    {
+      "cluster": "related-instance-write",
+      "count": 1,
+      "pattern": "an effect writes an instance other than the action's subject",
+      "sites": [
+        "ApplyHeldChange — fixtures/discovery-held-change.meant:51",
+      ],
+    },
+  ],
+  "questions": [],
+}
+`;
+
+exports[`sim fixtures/discovery-noise-cap.meant 1`] = `
+[
+  {
+    "counterexample": [
+      "Ticket#1 (subject): status = open",
+      "today = 2026-03-15",
+    ],
+    "file": "fixtures/discovery-noise-cap.meant",
+    "kind": "witness",
+    "message": "satisfiable — one concrete world lights this region up.",
+    "range": {
+      "end": {
+        "col": 27,
+        "line": 11,
+      },
+      "start": {
+        "col": 1,
+        "line": 11,
+      },
+    },
+    "status": "verified",
+    "subject": "OpenTicket",
+  },
+  {
+    "evidence": [
+      "this model carries 2 opaque effect sentence(s); an exit hiding in one of them would look exactly like this",
+    ],
+    "file": "fixtures/discovery-noise-cap.meant",
+    "kind": "machine",
+    "message": "edges land in \`CapReached\` but none computably leaves it: the region is terminal, or its exit lives in an effect the kernel cannot execute.",
+    "range": {
+      "end": {
+        "col": 27,
+        "line": 14,
+      },
+      "start": {
+        "col": 1,
+        "line": 14,
+      },
+    },
+    "status": "unprobeable",
+    "subject": "CapReached",
+  },
+  {
+    "counterexample": [
+      "Ticket#1 (subject): reminders_sent = 2",
+      "today = 2026-03-15",
+    ],
+    "file": "fixtures/discovery-noise-cap.meant",
+    "kind": "witness",
+    "message": "satisfiable — one concrete world lights this region up.",
+    "range": {
+      "end": {
+        "col": 27,
+        "line": 14,
+      },
+      "start": {
+        "col": 1,
+        "line": 14,
+      },
+    },
+    "status": "verified",
+    "subject": "CapReached",
+  },
+  {
+    "file": "fixtures/discovery-noise-cap.meant",
+    "kind": "probe",
+    "message": "effect sentence carries meaning the kernel cannot execute: "the nudge is suppressed".",
+    "range": {
+      "end": {
+        "col": 30,
+        "line": 20,
+      },
+      "start": {
+        "col": 7,
+        "line": 20,
+      },
+    },
+    "status": "unprobeable",
+    "subject": "NudgeAssignee@CapReached",
+  },
+  {
+    "file": "fixtures/discovery-noise-cap.meant",
+    "kind": "probe",
+    "message": "the deltas land in \`CapReached\` — authored nowhere, and correctly so (§4.6).",
+    "range": {
+      "end": {
+        "col": 14,
+        "line": 21,
+      },
+      "start": {
+        "col": 3,
+        "line": 21,
+      },
+    },
+    "status": "derived",
+    "subject": "NudgeAssignee@otherwise -> CapReached",
+  },
+  {
+    "file": "fixtures/discovery-noise-cap.meant",
+    "kind": "probe",
+    "message": "effect sentence carries meaning the kernel cannot execute: "the escalation goes out without a further reminder".",
+    "range": {
+      "end": {
+        "col": 57,
+        "line": 28,
+      },
+      "start": {
+        "col": 7,
+        "line": 28,
+      },
+    },
+    "status": "unprobeable",
+    "subject": "EscalateTicket@CapReached",
+  },
+  {
+    "file": "fixtures/discovery-noise-cap.meant",
+    "kind": "probe",
+    "message": "the deltas land in \`CapReached\` — authored nowhere, and correctly so (§4.6).",
+    "range": {
+      "end": {
+        "col": 14,
+        "line": 29,
+      },
+      "start": {
+        "col": 3,
+        "line": 29,
+      },
+    },
+    "status": "derived",
+    "subject": "EscalateTicket@otherwise -> CapReached",
+  },
+]
+`;
+
+exports[`report fixtures/discovery-noise-cap.meant 1`] = `
+{
+  "candidates": [
+    {
+      "blocked": "first-match branch exclusion — the bound follows from an earlier branch NOT matching, and the catalog does not chain negated branch reachability",
+      "claim": "\`Ticket.reminders_sent\` is bounded: every increment sits behind a first-match branch that already claimed the state where \`reminders_sent >= 2\`.",
+      "evidence": [
+        "increment site(s): NudgeAssignee@otherwise, EscalateTicket@otherwise",
+        "\`NudgeAssignee\`: \`in CapReached\` (reminders_sent >= 2) is matched before this branch",
+        "\`EscalateTicket\`: \`in CapReached\` (reminders_sent >= 2) is matched before this branch",
+      ],
+      "file": "fixtures/discovery-noise-cap.meant",
+      "id": "DRV-bounded-counter-Ticket-ea2c9b9c",
+      "range": {
+        "end": {
+          "col": 26,
+          "line": 23,
+        },
+        "start": {
+          "col": 7,
+          "line": 23,
+        },
+      },
+      "status": "near",
+      "template": "bounded-counter",
+    },
+    {
+      "claim": "\`Ticket.status\` is read by 1 gate(s) and written by nothing.",
+      "evidence": [
+        "read by shape OpenTicket",
+        "no delta and no creation assigns it: either the action that sets it is missing from the model, or the gate reads provisioning state the model does not own — the model does not say which",
+      ],
+      "file": "fixtures/discovery-noise-cap.meant",
+      "id": "DRV-suspicious-absence-Ticket-414ed27e",
+      "range": {
+        "end": {
+          "col": 35,
+          "line": 8,
+        },
+        "start": {
+          "col": 3,
+          "line": 8,
+        },
+      },
+      "status": "absence",
+      "template": "suspicious-absence",
+    },
+  ],
+  "opacity": [
+    {
+      "declaration": "shape CapReached",
+      "detail": [],
+      "file": "fixtures/discovery-noise-cap.meant",
+      "range": {
+        "end": {
+          "col": 27,
+          "line": 14,
+        },
+        "start": {
+          "col": 1,
+          "line": 14,
+        },
+      },
+      "sentences": 0,
+      "skipped": 0,
+      "unprobeable": 1,
+    },
+    {
+      "declaration": "action NudgeAssignee",
+      "detail": [
+        "effect sentence (fixtures/discovery-noise-cap.meant:20) — declared, unverified",
+      ],
+      "file": "fixtures/discovery-noise-cap.meant",
+      "range": {
+        "end": {
+          "col": 21,
+          "line": 17,
+        },
+        "start": {
+          "col": 1,
+          "line": 17,
+        },
+      },
+      "sentences": 1,
+      "skipped": 0,
+      "unprobeable": 1,
+    },
+    {
+      "declaration": "action EscalateTicket",
+      "detail": [
+        "effect sentence (fixtures/discovery-noise-cap.meant:28) — declared, unverified",
+      ],
+      "file": "fixtures/discovery-noise-cap.meant",
+      "range": {
+        "end": {
+          "col": 22,
+          "line": 25,
+        },
+        "start": {
+          "col": 1,
+          "line": 25,
+        },
+      },
+      "sentences": 1,
+      "skipped": 0,
+      "unprobeable": 1,
+    },
+  ],
+  "patterns": [],
+  "questions": [],
+}
+`;

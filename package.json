@@ -1,0 +1,24 @@
+{
+  "name": "meant-lang",
+  "version": "0.1.0",
+  "description": "A small, checkable language for how an application should behave, with a deterministic checker and simulator that coding agents work from.",
+  "keywords": ["dsl", "specification", "business-rules", "model-checking", "coding-agents", "claude-code"],
+  "homepage": "https://meantlang.dev",
+  "repository": { "type": "git", "url": "git+https://github.com/teambrilliant/meant-lang.git" },
+  "bugs": { "url": "https://github.com/teambrilliant/meant-lang/issues" },
+  "author": "Alex Kurkin",
+  "license": "MIT",
+  "type": "module",
+  "engines": { "bun": ">=1.4" },
+  "bin": { "meant": "./src/cli.ts" },
+  "files": ["src", "spec/meant-grammar-v0.md", "fixtures", "LICENSE", "README.md"],
+  "scripts": {
+    "meant": "bun src/cli.ts",
+    "test": "bun test",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "typescript": "^7.0.2"
+  }
+}

@@ -1,0 +1,10 @@
+id = "meant"
+name = "Meant Lang"
+version = "0.1.1"
+schema_version = 1
+authors = ["Alex Kurkin"]
+description = "Meant Lang business-intent language: syntax highlighting and outline."
+
+[grammars.meant]
+repository = "https://github.com/teambrilliant/tree-sitter-meant"
+rev = "4dfd4c8409123e29e36bb98a0411cdb6d8b41098"

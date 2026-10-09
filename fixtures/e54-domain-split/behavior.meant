@@ -1,0 +1,17 @@
+domain e54-split
+
+shape Queued of Job
+  where state = queued
+
+shape Done of Job
+  where state = done
+
+action RunJob of Job
+  requires Queued
+  effect
+    attempts += 1
+    state = done
+
+scenario JobRuns
+  with Queued
+  the job runs via RunJob -> Done

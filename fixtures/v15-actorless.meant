@@ -1,0 +1,15 @@
+domain v15
+  "`by` binds to the well-known `dimension actor`, which this domain never declares (E34/V15)."
+  mode model-first
+
+concept Subscription
+  dimension status = active | cancelled
+
+shape Active of Subscription
+  where status = active
+
+action Cancel of Subscription
+  by customer  # EXPECT: V15
+  requires Active
+  effect
+    status = cancelled

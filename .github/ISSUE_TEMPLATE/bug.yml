@@ -1,0 +1,35 @@
+name: Bug report
+description: A command crashed, a diagnostic is wrong, or a verdict looks wrong.
+labels: [bug]
+body:
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: The first line `meant` prints, e.g. `meant 0.1.0`.
+    validations:
+      required: true
+  - type: input
+    id: command
+    attributes:
+      label: Command
+      description: The exact command you ran.
+      placeholder: meant check .meant --json
+    validations:
+      required: true
+  - type: textarea
+    id: model
+    attributes:
+      label: Minimal model
+      description: The smallest model that reproduces it. Remove anything private.
+      render: meant
+    validations:
+      required: true
+  - type: textarea
+    id: output
+    attributes:
+      label: Output
+      description: What `meant` printed, and what you expected instead.
+      render: text
+    validations:
+      required: true

@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A domain-specific language for business intent and behavior. Make the rules explicit, check the model, and leave implementation choices to the engineer.">
+  <meta name="theme-color" content="#1837e5">
+  <title>Meant Lang | Build what you meant.</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231837e5'/%3E%3Cpath d='M11 8H7v16h4m10-16h4v16h-4M13 16h6' fill='none' stroke='white' stroke-width='2.5'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/style.css">
+  <script src="/site.js" defer></script>
+<meta property="og:type" content="website"><meta property="og:site_name" content="Meant Lang"><meta property="og:title" content="Meant Lang | Build what you meant."><meta property="og:description" content="A domain-specific language for business intent and behavior. Make the rules explicit, check the model, and leave implementation choices to the engineer."><meta property="og:url" content="https://meantlang.dev/"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="Meant Lang | Build what you meant."><meta name="twitter:description" content="A domain-specific language for business intent and behavior. Make the rules explicit, check the model, and leave implementation choices to the engineer."><link rel="canonical" href="https://meantlang.dev/"><script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Meant Lang",
+  "alternateName": "meant",
+  "description": "A small, checkable language for how an application should behave: who can act, under what conditions, and what changes. Coding agents draft the model; the deterministic meant toolkit checks it.",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any platform supported by Bun",
+  "url": "https://meantlang.dev/",
+  "downloadUrl": "https://www.npmjs.com/package/meant-lang",
+  "license": "https://opensource.org/license/mit",
+  "isAccessibleForFree": true,
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "sameAs": [
+    "https://github.com/teambrilliant/meant-lang"
+  ],
+  "publisher": {
+    "@type": "Organization",
+    "name": "Brilliant Consulting SL",
+    "brand": "TeamBrilliant",
+    "url": "https://www.teambrilliant.ai/"
+  }
+}
+</script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="header wrap">
+    <a class="wordmark" href="/" aria-label="Meant Lang home"><span class="mark" aria-hidden="true">[·]</span><span data-brand>Meant<span class="brand-lang"> Lang</span></span></a>
+    <nav aria-label="Main navigation"><a href="#example">The language</a><a href="#workflow">The workflow</a><a href="#existing-app">Model your app</a><a href="/docs/">Read the docs <span aria-hidden="true">↗</span></a></nav>
+  </header>
+  <main id="main">
+    <section class="hero wrap">
+      <div class="eyebrow"><span>A DSL for business intent &amp; behavior</span><span class="release">Developer preview</span></div>
+      <h1>Build what <br><em>you meant.</em></h1>
+      <div class="hero-bottom"><p>Meant Lang is a small, checkable language for how an application should behave: who can act, under what conditions, and what changes. Your team and coding agents can check the model. Engineers choose how to build it.</p><a class="button" href="#example">See an example <span aria-hidden="true">↓</span></a></div><div class="hero-principles"><span>Human intent</span><span aria-hidden="true">→</span><span>Checkable model</span><span aria-hidden="true">→</span><span>Engineering judgment</span></div>
+    </section>
+
+
+    <section id="example" class="example wrap">
+      <div class="section-kicker"><span>01 / FROM INTENT TO A MODEL</span><span>Who can act, when, and what changes.</span></div>
+      <div class="intent-framing">
+        <h2>Less room <br>for guesswork.</h2>
+        <div>
+          <p>Requirements written in English can leave decisions open to interpretation. Agents can fill those gaps with assumptions.</p>
+          <p>Meant gives you a small, clearly defined language for describing intended behavior: who can act, under what conditions, and what changes. Your team makes those decisions explicit, giving agents less to guess.</p>
+        </div>
+      </div>
+      <div class="example-grid">
+        <div class="section-intro"><h2>“Send the invoice” <br>leaves a lot unsaid.</h2><p>Who can send it? What if it is empty? Can it be sent twice? An agent needs these decisions before it can build the behavior <strong class="intent-emphasis">you intended.</strong></p><p>Here, the model says when <code>SendInvoice</code> is allowed and what it changes. Storage, API routes, framework, and deployment belong to a separate engineering design.</p><a class="text-link" href="/examples/invoicing/">Explore the complete model <span aria-hidden="true">↗</span></a></div>
+        <div class="code-window"><div class="code-title"><span>Sending an invoice</span><button class="copy-button" data-copy="invoice-code" type="button">Copy excerpt</button></div><pre><code id="invoice-code"><span class="kw">concept</span> Invoice
+  <span class="kw">dimension</span> status = draft | sent
+
+<span class="kw">concept</span> DenyCode
+  <span class="kw">field</span> copy: string
+  <span class="kw">values</span>
+    NOT_DRAFT "Only a draft invoice can be sent."
+    EMPTY_INVOICE "An invoice needs at least one line item."
+
+<span class="kw">shape</span> Draft <span class="kw">of</span> Invoice
+  <span class="kw">where</span> status = draft
+
+<span class="kw">shape</span> Empty <span class="kw">of</span> Invoice
+  <span class="kw">where</span> <span class="kw">no</span> LineItem
+
+<span class="kw">action</span> SendInvoice <span class="kw">of</span> Invoice
+  <span class="kw">by</span> owner
+  <span class="kw">requires</span> Draft <span class="kw">else</span> NOT_DRAFT
+  <span class="kw">requires</span> <span class="kw">not</span> Empty <span class="kw">else</span> EMPTY_INVOICE
+  <span class="kw">effect</span>
+    status = sent</code></pre><div class="code-foot">The full example includes the remaining declarations and three scenarios.</div></div>
+      </div>
+<div class="scenario-explorer" aria-labelledby="scenario-title">
+ <div class="scenario-heading"><div><span class="label">Explore the modeled behavior</span><h3 id="scenario-title">Try sending the invoice.</h3></div><span class="recorded-badge">Recorded CLI results</span></div>
+ <div class="scenario-choices" role="group" aria-label="Choose an invoice scenario"><button type="button" data-scenario="draft" aria-pressed="false">A draft with line items</button><button type="button" data-scenario="empty" aria-pressed="true">An empty draft</button><button type="button" data-scenario="sent" aria-pressed="false">An already sent invoice</button></div>
+ <div class="scenario-result" aria-live="polite" aria-atomic="true"><div><span class="label">The scenario</span><pre><code id="scenario-code">scenario SendingAnEmptyDraft
+  with Draft, Empty
+  the owner sends it via SendInvoice -&gt; denied EMPTY_INVOICE</code></pre></div><div class="result-verdict"><span class="label">The recorded outcome</span><strong id="scenario-outcome">Denied: EMPTY_INVOICE</strong><p id="scenario-explanation">The invoice has no line items, so SendInvoice is denied.</p><span class="result-match" id="scenario-status">✓ Matches the scenario expectation</span></div></div>
+ <p class="under-note">Select a scenario to see its recorded simulator result. <a href="/examples/invoicing/#results">Inspect the evidence and its limits ↗</a></p>
+ </div>
+    </section>
+    <section id="implementation-choices" class="comparison wrap" aria-labelledby="comparison-title">
+      <div class="section-kicker"><span>02 / THE ENGINEER’S CHOICES</span><span>The invoice rules stay the same.</span></div>
+      <h2 id="comparison-title">Choose how <br>to build it.</h2><p class="section-lede">The same invoice rules can work in a small application or an existing system. Choose a design below to see what an engineer might build.</p>
+      <div class="comparison-grid">
+        <article class="intent-panel">
+          <div class="panel-heading"><span class="label">The business contract</span><span class="tag">Agreed behavior</span></div>
+          <h3>When can an invoice be sent?</h3>
+          <ol class="rules"><li>Only the owner can send it.</li><li>It must be a draft.</li><li>It must contain at least one line item.</li><li>Sending it changes its status to sent.</li></ol>
+          <p class="panel-note">Changing the framework or database leaves these four rules intact.</p>
+        </article>
+        <article class="engineering-panel">
+          <div class="panel-heading"><span class="label">The engineering decisions</span><span class="tag light">Your judgment</span></div>
+          <div class="choices" role="group" aria-label="Explore a possible implementation">
+            <button type="button" data-option="small" aria-pressed="true">Small team</button><button type="button" data-option="growing" aria-pressed="false">Growing product</button><button type="button" data-option="established" aria-pressed="false">Existing system</button>
+          </div>
+          <div id="implementation" aria-live="polite" aria-atomic="true">
+            <div data-option-panel="small">
+              <h3>Use one application.</h3>
+              <p class="implementation-description">Handle the invoice workflow in a Django application, with SQLite for storage and an email provider for delivery.</p>
+              <dl class="architecture"><div><dt>Application</dt><dd>Django monolith</dd></div><div><dt>Storage</dt><dd>SQLite</dd></div><div><dt>Delivery</dt><dd>Email provider integration</dd></div></dl>
+            </div>
+            <div data-option-panel="growing" hidden>
+              <h3>Move delivery to a worker.</h3>
+              <p class="implementation-description">Handle requests in a TypeScript API and send emails through a queue and background worker.</p>
+              <dl class="architecture"><div><dt>Application</dt><dd>TypeScript API</dd></div><div><dt>Storage</dt><dd>PostgreSQL</dd></div><div><dt>Delivery</dt><dd>Queue + background worker</dd></div></dl>
+            </div>
+            <div data-option-panel="established" hidden>
+              <h3>Use the existing system.</h3>
+              <p class="implementation-description">Add the workflow to the existing Java service. Use its system of record and an outbox with the existing mail service.</p>
+              <dl class="architecture"><div><dt>Application</dt><dd>Existing Java service</dd></div><div><dt>Storage</dt><dd>Current system of record</dd></div><div><dt>Delivery</dt><dd>Outbox + existing mail service</dd></div></dl>
+            </div>
+          </div>
+          <p class="panel-note">These are example designs. Meant does not choose the stack or generate the application.</p>
+        </article>
+      </div>
+      <p class="under-note">Whichever design you choose, test the application against the four rules.</p>
+    </section>
+
+    <section id="workflow" class="workflow wrap">
+      <div class="section-kicker"><span>03 / BUILT FOR PEOPLE AND AGENTS</span><span>Draft, review, implement, test.</span></div>
+      <h2>From agreed rules <br>to application tests.</h2>
+      <div class="steps"><article><span class="step-number">01</span><h3>Agree on the behavior</h3><p>Product managers and engineers decide the rules, exceptions, and outcomes in the business’s own words.</p></article><article><span class="step-number">02</span><h3>Check the model</h3><p>An agent drafts the model. Deterministic checks catch structural mistakes. Simulation explores supported claims and can expose counterexamples.</p></article><article><span class="step-number">03</span><h3>Choose the implementation</h3><p>The engineer chooses the architecture, stack, and integrations. Agents work from those decisions and the agreed model.</p></article><article><span class="step-number">04</span><h3>Test the application</h3><p>Test that the application behaves as agreed. Review changes to the requirements before asking an agent to implement them.</p></article></div>
+    </section>
+    <section id="existing-app" class="scope wrap" aria-labelledby="existing-app-title"><div><span class="label">Start from your code</span><h2 id="existing-app-title">Model your <br>existing app.</h2><p class="section-lede">Point your coding agent at one workflow in your codebase. It drafts the model from the code, and you decide what the model means.</p><a class="text-link" href="/docs/#from-code">How it works →</a></div><div><div class="code-window"><div class="code-title"><span>Install, then prompt your agent</span><button class="copy-button" data-copy="existing-app-prompt" type="button">Copy prompt</button></div><pre><code>bun add -g meant-lang</code></pre><div class="code-foot">Then give your agent one prompt that names one workflow:</div><pre class="prompt"><code id="existing-app-prompt">Run `meant` and follow its instructions to build a Meant model of the &lt;workflow&gt; workflow in this app.</code></pre></div><div class="scope-list"><article><h3>It reads that workflow's code.</h3><p>Permission checks, stored entities, status fields, handlers, guard clauses, and tests become declarations, each citing the file and line it came from.</p></article><article><h3>It proposes; you decide.</h3><p>New vocabulary waits for your verdict, and contradictions in the code are marked as undecided instead of guessed.</p></article><article><h3>You review what it found.</h3><p>Check, simulation, and report show the falsified claims, unverified prose, and open questions to settle with your team.</p></article></div></div></section>
+    <section class="scope wrap" aria-labelledby="scope-title"><div><span class="label">Checks and limits</span><h2 id="scope-title">What the checks <br>can tell you.</h2></div><div class="scope-list"><article><h3>The checker is deterministic.</h3><p>No LLM decides whether a model passes its structural checks.</p></article><article><h3>Simulation has a defined scope.</h3><p>A counterexample disproves a claim. A passing bounded search covers only the conditions searched.</p></article><article><h3>Unknowns stay visible.</h3><p>Some requirements remain in prose that the simulator cannot execute. Reports list them for review.</p></article><article><h3>The application needs its own tests.</h3><p>The current toolkit checks models. Automatic application conformance and runtime enforcement are not implemented.</p></article></div></section>
+    <section class="questions wrap" aria-labelledby="questions-title"><div><span class="label">Questions about Meant</span><h2 id="questions-title">Where Meant fits.</h2></div><div class="question-list">
+<details><summary>Why use a DSL instead of a requirements document?</summary><p>Prose is a useful starting point. A model adds references, conditions, outcomes, and expectations that the checker and simulator can inspect. You can keep requirements in prose; reports identify what remains unverified.</p></details>
+<details><summary>Does Meant generate application code?</summary><p>The current toolkit does not generate applications. The model is an input to engineering design and agent-assisted implementation. Engineers choose the architecture, stack, integrations, and operational tradeoffs.</p></details>
+<details><summary>Does a passing model mean my application is correct?</summary><p>No. Structural checks and bounded simulation provide evidence about the model. Application tests, integration checks, and reviews must separately establish that the implementation follows the intended behavior.</p></details>
+<details><summary>Do product managers need to learn the whole language?</summary><p>Start by reviewing the rules and scenarios with an engineer. Agents can help draft the syntax. You decide whether the model says what the business means.</p></details>
+<details><summary>Can I install Meant today?</summary><p>Yes. Meant is a developer preview: install it with <code>bun add -g meant-lang</code> (Bun 1.4 or later). The source is on <a href="https://github.com/teambrilliant/meant-lang">GitHub</a> under the MIT license. <a href="/docs/#status">Read the project status.</a></p></details>
+</div></section>
+    <section class="closing wrap"><div><span class="label">Start with one workflow</span><h2>Start with the <br>invoice model.</h2></div><div><p>Read the rules, follow the three scenarios, and see what the simulator checks.</p><a class="button" href="/docs/">Explore the language <span aria-hidden="true">↗</span></a></div></section>
+  </main>
+  <footer class="footer wrap"><a class="wordmark" href="/"><span class="mark" aria-hidden="true">[·]</span><span data-brand>Meant<span class="brand-lang"> Lang</span></span></a><span>Built by <a href="https://www.teambrilliant.ai/">TeamBrilliant</a></span><span><a href="https://github.com/teambrilliant/meant-lang">Source</a> · <a href="https://github.com/teambrilliant/meant-lang/blob/main/LICENSE">MIT license</a></span><a href="/docs/#status">Project status</a></footer>
+<div class="copy-feedback sr-only" role="status" aria-live="polite"></div>
+</body>
+</html>

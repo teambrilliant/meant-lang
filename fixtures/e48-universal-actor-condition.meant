@@ -1,0 +1,23 @@
+domain e48
+  "An `actor.`-condition lives in a `by <actor>:` block (E48/V14)."
+  mode model-first
+
+dimension actor = customer | admin
+
+concept Customer
+
+concept Subscription
+  dimension status = active | cancelled
+  field customer: Customer
+
+shape Active of Subscription
+  where status = active
+
+action Cancel of Subscription
+  by customer, admin
+  requires Active
+  requires actor.id = customer.id  # EXPECT: V14
+  by partner:  # EXPECT: V14, V3
+    requires Active
+  effect
+    status = cancelled

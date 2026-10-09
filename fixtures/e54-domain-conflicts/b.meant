@@ -1,0 +1,7 @@
+domain e54-conflicts
+  mode code-first  # EXPECT: P
+  state-of-record "in-memory"
+
+concept Customer  # EXPECT: V1
+  "A second declaration of the same name, one file over."
+  field email: string

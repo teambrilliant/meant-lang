@@ -1,0 +1,51 @@
+domain discovery-held-change
+  "Discovery fixture: three creations guarded by the same `no … pending` conjunct derive the
+   at-most-one theorem; the residue sentences feed the pattern miner (one related-instance
+   write, one identical-shape cluster of two)."
+  mode model-first
+
+dimension actor = member | staff
+
+concept Membership
+  "A gym membership; changes are held until the term boundary."
+  dimension status = active | paused | cancelled
+  field member_name: string
+
+concept HeldChange
+  "A requested future change, held until the term boundary applies it."
+  dimension status = pending | applied
+  dimension kind = pause | cancel | switch
+  field membership: Membership
+
+shape MidTerm of Membership
+  where status = active
+    and no HeldChange where status = pending
+
+shape PendingHold of Membership
+  where some HeldChange where status = pending
+
+action RequestPause
+  by member
+  in MidTerm :
+    effect
+      new HeldChange with status = pending, kind = pause
+      the member is notified by email
+
+action RequestCancel
+  by member
+  in MidTerm :
+    effect
+      new HeldChange with status = pending, kind = cancel
+      the member is notified by email
+
+action RequestSwitch
+  by staff
+  in MidTerm :
+    effect
+      new HeldChange with status = pending, kind = switch
+
+action ApplyHeldChange of Membership
+  "The term boundary applies the held change to the live Membership."
+  requires some HeldChange where status = pending
+  effect
+    the held state mirrors onto the live Membership; HeldChange.status becomes applied

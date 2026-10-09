@@ -1,0 +1,5 @@
+domain e54-conflictz
+  "A misspelled header is a legal new domain — so the finding lands where the typo bites: on every
+   reference into the domain it meant."
+
+shape Lapsed of Customer  # EXPECT: V2

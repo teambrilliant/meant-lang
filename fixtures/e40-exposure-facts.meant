@@ -1,0 +1,24 @@
+domain e40
+  "Exposure facts are declared vocabulary — quoted-string facts are gone (E40)."
+  mode model-first
+
+dimension actor = customer | admin
+
+concept Subscription
+  dimension status = active | cancelled
+  field next_ship_date: date
+
+concept Item
+  field subscription: Subscription
+  field product_name: string
+
+touchpoints
+  "App"
+
+exposure Subscription
+  to customer at "App"
+    must-see next_ship_date, Item.product_name
+    must-see "the deny reason"                           # EXPECT: P
+    must-see ship_date_typo                              # EXPECT: V11
+  to admin at "Desk"                                     # EXPECT: V2
+    must-see next_ship_date

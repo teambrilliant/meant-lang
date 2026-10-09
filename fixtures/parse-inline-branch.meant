@@ -1,0 +1,14 @@
+domain parse-inline-branch
+  "Branch bodies are block-only — the inline form retired with E47."
+  mode model-first
+
+concept Subscription
+  dimension status = active | cancelled
+
+shape Active of Subscription
+  where status = active
+
+action Cancel of Subscription
+  in Active : status = cancelled                         # EXPECT: P
+  effect
+    status = cancelled

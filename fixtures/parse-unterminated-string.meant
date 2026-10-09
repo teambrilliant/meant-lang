@@ -1,0 +1,14 @@
+domain parse-unterminated
+  "An unterminated string is reported at its opening quote (§17)."
+  mode model-first
+
+concept Subscription
+  dimension status = active | cancelled
+
+shape Active of Subscription
+  where status = active
+
+action Cancel of Subscription
+  requires Active
+  # EXPECT-NEXT: P
+  note "this string never closes

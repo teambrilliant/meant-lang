@@ -1,0 +1,25 @@
+domain sim-dead-region
+  "A planted unsatisfiable region. `check` cannot see it — every reference resolves and every
+   operand type-checks — so it takes a witness search to convict: no world lights the region up,
+   which makes the shape dead vocabulary (V12)."
+  mode model-first
+
+concept Loan
+  "One borrowing."
+  dimension status = open | returned
+  field balance: int
+
+shape OpenLoan of Loan
+  where status = open
+
+shape Impossible of Loan  # SIM-EXPECT: dead Impossible
+  "Two values of one axis at once: closed vocabulary makes this unsatisfiable, not merely unlikely."
+  where status = open and status = returned
+
+action Repay of Loan
+  "Closes the loan."
+  requires OpenLoan
+  requires not Impossible
+  effect
+    status = returned
+    balance = 0
