@@ -11,11 +11,12 @@
 <a class="skip" href="#main">Skip to content</a>
 <header class="header wrap"><a class="wordmark" href="/"><span class="mark" aria-hidden="true">[·]</span><span data-brand>Meant<span class="brand-lang"> Lang</span></span></a><nav aria-label="Main navigation"><a href="/">Overview</a><a href="/examples/invoicing/">Example</a><a href="/docs/reference/">Reference</a></nav></header>
 <div class="docs-layout wrap">
-  <nav class="docs-nav" aria-label="Documentation sections"><a href="#main">Introduction</a><a href="#first-model">Your first model</a><a href="#vocabulary">Read the vocabulary</a><a href="#engineering">Engineering decisions</a><a href="#agents">Work with an agent</a><a href="#from-code">Start from your codebase</a><a href="#verification">Verification and limits</a><a href="#commands">Current toolkit</a><a href="#status">Project status</a></nav>
+  <nav class="docs-nav" aria-label="Documentation sections"><a href="#main">Introduction</a><a href="#first-model">Your first model</a><a href="#vocabulary">Read the vocabulary</a><a href="#engineering">Engineering decisions</a><a href="#agents">Work with an agent</a><a href="#from-code">Start from your codebase</a><a href="#verification">Verification and limits</a><a href="#commands">Current toolkit</a><a href="#editors">Editor support</a><a href="#status">Project status</a></nav>
   <main id="main" class="docs-content">
     <span class="label">Language guide / developer preview</span>
     <h1>Make business intent <br>explicit.</h1>
     <p>Meant is a domain-specific language that describes business intent and observable application behavior: who can act, which conditions must hold, and what an action changes. It gives product people, engineers, and coding agents a shared model to inspect.</p>
+    <p>Meant is inspired by formal verification languages like TLA+, but much simpler. Each application builds its own vocabulary first, the ubiquitous language of domain-driven design, and then describes its behavior in those words. The checker resolves every name, simulates cases, and shows what the definition is missing, so agents work from one consistent description of your world instead of guessing between sessions.</p>
     <p>The model is separate from the implementation. An engineer chooses architecture, frameworks, storage, and delivery mechanisms based on experience, existing systems, operational constraints, and preferences. Application tests must establish that those choices preserve the agreed behavior.</p>
     <div class="doc-paths"><a href="/examples/invoicing/"><span class="label">01 / Read a complete model</span><strong>Sending an invoice ↗</strong><span>Rules, declarations, scenarios, and recorded evidence.</span></a><a href="/docs/reference/"><span class="label">02 / Understand the toolkit</span><strong>Commands &amp; language reference ↗</strong><span>What each command checks and what it reports.</span></a></div><div class="callout"><p>Start with one workflow whose rules you want to discuss or preserve. You can model the rest of the application later.</p></div>
 
@@ -80,7 +81,7 @@ action SendInvoice of Invoice
     <p><code>verified-by</code> currently records an anchor to an application test. The CLI does not execute that referenced test. Automatic model-based application testing and runtime enforcement are future work.</p>
 
     <h2 id="commands">Current toolkit</h2>
-    <p>The toolkit uses the <code>meant</code> executable and the <code>.meant</code> extension. It needs Bun 1.4 or later.</p>
+    <p>The toolkit is the <a href="https://www.npmjs.com/package/meant-lang">meant-lang package</a> on npm. It installs the <code>meant</code> executable, reads <code>.meant</code> files, and needs Bun 1.4 or later.</p>
     <pre><code>bun add -g meant-lang
 
 meant check path/to/model.meant --json
@@ -92,6 +93,9 @@ meant skill
 meant spec</code></pre>
     <p><code>check</code> validates structure and references. <code>sim</code> explores supported behavior. <code>report</code> exposes unverified prose and questions. <code>fmt</code> provides canonical formatting. <code>skill</code> prints the agent discipline, and <code>spec</code> provides the normative language reference.</p>
 
+    <h2 id="editors">Editor support</h2>
+    <p>A <a href="https://github.com/teambrilliant/meant-lang/tree/main/editors/zed">Zed extension</a> highlights <code>.meant</code> files and lists declarations in the outline. Until it is listed in Zed's extension registry, install it as a dev extension: clone the repository, run <code>zed: install dev extension</code> from the command palette, and select <code>editors/zed</code>. Zed downloads the <a href="https://github.com/teambrilliant/tree-sitter-meant">tree-sitter-meant</a> grammar and compiles it during installation.</p>
+
     <h2 id="status">Project status</h2>
     <p>Meant Lang is a developer preview from <a href="https://www.teambrilliant.ai/">TeamBrilliant</a>.</p>
     <p>The toolkit includes structural checking, formatting, bounded simulation, reports, and model-edit feedback for agents. Commands and diagnostics may change between preview releases.</p>
@@ -100,6 +104,6 @@ meant spec</code></pre>
 
   </main>
 </div>
-<footer class="footer wrap"><a class="wordmark" href="/"><span class="mark" aria-hidden="true">[·]</span><span data-brand>Meant<span class="brand-lang"> Lang</span></span></a><span>Built by <a href="https://www.teambrilliant.ai/">TeamBrilliant</a></span><span><a href="https://github.com/teambrilliant/meant-lang">Source</a> · <a href="https://github.com/teambrilliant/meant-lang/blob/main/LICENSE">MIT license</a></span><a href="/">Back to overview</a></footer>
+<footer class="footer wrap"><a class="wordmark" href="/"><span class="mark" aria-hidden="true">[·]</span><span data-brand>Meant<span class="brand-lang"> Lang</span></span></a><span>Built by <a href="https://www.teambrilliant.ai/">TeamBrilliant</a></span><span><a href="https://github.com/teambrilliant/meant-lang">Source</a> · <a href="https://github.com/teambrilliant/meant-lang/blob/main/LICENSE">MIT license</a> · <a href="https://github.com/teambrilliant/meant-lang/issues">Issues</a></span><a href="/">Back to overview</a></footer>
 </body>
 </html>
