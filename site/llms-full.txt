@@ -1,6 +1,6 @@
 # Meant Lang
 
-> Meant Lang is a small, checkable language for how an application should behave: who can act, under what conditions, and what changes. People decide the behavior, coding agents draft the model, and the deterministic `meant` toolkit checks it. Engineers choose the implementation.
+> Meant Lang is a checkable spec for what your app should do: who can act, under what conditions, and what changes. It reads like pseudocode and checks like a type system. People decide the behavior, coding agents draft the model, and the deterministic `meant` toolkit checks it. Engineers choose the implementation.
 
 Meant is inspired by formal verification languages like TLA+, but much simpler. Each application builds its own vocabulary first (the ubiquitous language of domain-driven design) and describes its behavior in those words. Every capitalized name must resolve to a declaration, so agents reason about the application in one consistent vocabulary across sessions. The checker simulates cases and reports what the definition is missing: unreachable states, unresolved references, and claims it can falsify with a counterexample.
 

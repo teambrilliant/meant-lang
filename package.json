@@ -1,7 +1,7 @@
 {
   "name": "meant-lang",
   "version": "0.1.0",
-  "description": "A small, checkable language for how an application should behave, with a deterministic checker and simulator that coding agents work from.",
+  "description": "A checkable spec for what your app should do: reads like pseudocode, checks like a type system. Coding agents draft it; a deterministic checker and simulator check it.",
   "keywords": ["dsl", "specification", "business-rules", "model-checking", "coding-agents", "claude-code"],
   "homepage": "https://meantlang.dev",
   "repository": { "type": "git", "url": "git+https://github.com/teambrilliant/meant-lang.git" },

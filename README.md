@@ -1,6 +1,6 @@
 # Meant Lang
 
-A DSL for business intent and observable behavior. People describe what an application should do in business vocabulary; engineers choose how to implement it. Coding agents work from that model and the engineer's technical design. The deterministic toolkit checks the model; application tests establish whether the implementation follows it.
+A checkable spec for what your app should do: it reads like pseudocode and checks like a type system. People describe what an application should do in business vocabulary; engineers choose how to implement it. Coding agents work from that model and the engineer's technical design. The deterministic toolkit checks the model; application tests establish whether the implementation follows it.
 
 ## Why
 
